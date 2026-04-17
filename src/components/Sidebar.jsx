@@ -1,24 +1,4 @@
-// import { NavLink } from "react-router-dom";
 
-// const Sidebar = () => {
-//   return (
-//     <div className="w-60 h-screen bg-gray-900 text-white p-4">
-
-//       <h2 className="text-xl font-bold mb-6">Billing App</h2>
-
-//       <ul className="space-y-3">
-//         <li><NavLink to="/app/dashboard">Dashboard</NavLink></li>
-//         <li><NavLink to="/app/products">Products</NavLink></li>
-//         <li><NavLink to="/app/purchase">Purchase</NavLink></li>
-//         <li><NavLink to="/app/sales">Sales</NavLink></li>
-//         <li><NavLink to="/app/expenses">Expenses</NavLink></li>
-//       </ul>
-
-//     </div>
-//   );
-// };
-
-// export default Sidebar;
 
 
 import { NavLink } from "react-router-dom";
@@ -107,6 +87,13 @@ const Sidebar = () => {
     Sales Return
   </NavLink>
 </li>
+<NavLink to="/app/purchase-return"
+  className={({ isActive }) =>
+      `block p-2 rounded ${
+        isActive ? "bg-gray-700" : "hover:bg-gray-700"
+      }`
+    }
+  >Purchase Return</NavLink>
 
       </ul>
 

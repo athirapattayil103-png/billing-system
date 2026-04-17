@@ -11,57 +11,55 @@
       "id": "1",
       "name": "Rice",
       "price": 50,
-      "stock": 101,
-      "minStock": 10
+      "stock": 83,
+      "minStock": 10,
+      "category": "food"
     },
     {
-      "id": "6f3b",
-      "name": "ba",
-      "price": 500,
-      "stock": 19,
-      "minStock": 11
+      "id": "d6d3",
+      "name": "egg",
+      "price": 10,
+      "stock": 20,
+      "minStock": 19,
+      "category": "grosery"
     },
     {
-      "id": "85c1",
-      "name": "fan",
-      "price": 10000,
-      "stock": 11,
-      "minStock": 20
+      "id": "cd9f",
+      "name": "book",
+      "price": 50,
+      "stock": 200,
+      "minStock": 200,
+      "category": "stationary"
+    },
+    {
+      "id": "1b27",
+      "name": "pen",
+      "price": 10,
+      "stock": 108,
+      "minStock": 100,
+      "category": "stationary"
+    },
+    {
+      "id": "6f09",
+      "name": "pencil",
+      "price": 8,
+      "stock": 150,
+      "minStock": 100,
+      "category": "stationary"
     }
   ],
   "purchases": [
     {
-      "id": "c36a",
-      "productId": "1",
-      "quantity": 2,
-      "cost": 1000,
-      "date": "2026-04-08T17:23:13.280Z"
-    },
-    {
-      "id": "9dc5",
-      "productId": "6f3b",
-      "quantity": 9,
-      "cost": 900,
-      "date": "2026-04-08T17:40:41.317Z"
+      "id": "909c",
+      "productId": "1b27",
+      "productName": "pen",
+      "quantity": 8,
+      "cost": 10,
+      "total": 10,
+      "date": "2026-04-17T16:49:36.691Z"
     }
   ],
   "sales": [
-    {
-      "id": "408c",
-      "items": [
-        {
-          "id": "6f3b",
-          "name": "ba",
-          "price": 500,
-          "stock": 19,
-          "minStock": 11,
-          "qty": 19,
-          "total": 9500
-        }
-      ],
-      "total": 9500,
-      "date": "2026-04-08T17:42:24.746Z"
-    },
     {
       "id": "0d99",
       "items": [
@@ -69,39 +67,78 @@
           "id": "1",
           "name": "Rice",
           "price": 50,
-          "stock": 104,
-          "minStock": 10,
           "qty": 3,
           "total": 150
         }
       ],
       "total": 150,
       "date": "2026-04-10T16:43:44.308Z"
-    }
-  ],
-  "expenses": [
+    },
     {
-      "id": "7cc9",
-      "title": "ba",
-      "amount": 10000,
-      "date": "2026-04-08T17:41:46.149Z"
+      "id": "d72e",
+      "items": [
+        {
+          "id": "85c1",
+          "name": "fan",
+          "price": 10000,
+          "qty": 2,
+          "total": 20000
+        }
+      ],
+      "total": 20000,
+      "date": "2026-04-17T16:08:25.778Z",
+      "returned": true
     }
   ],
+  "expenses": [],
   "notifications": [
     {
-      "id": "180f",
+      "id": "b794",
       "message": "fan is low stock",
-      "date": "2026-04-10T16:52:51.928Z"
+      "date": "2026-04-17T17:26:31.467Z"
     },
     {
-      "id": "70b6",
+      "id": "1a77",
       "message": "fan is low stock",
-      "date": "2026-04-14T03:53:42.045Z"
+      "date": "2026-04-17T17:26:31.472Z"
     },
     {
-      "id": "19b4",
+      "id": "33ad",
       "message": "fan is low stock",
-      "date": "2026-04-14T03:53:42.067Z"
+      "date": "2026-04-17T17:30:16.128Z"
+    },
+    {
+      "id": "e8e1",
+      "message": "fan is low stock",
+      "date": "2026-04-17T17:30:16.138Z"
+    },
+    {
+      "id": "f3b3",
+      "message": "fan is low stock",
+      "date": "2026-04-17T17:30:31.244Z"
+    },
+    {
+      "id": "231a",
+      "message": "fan is low stock",
+      "date": "2026-04-17T17:30:31.247Z"
+    }
+  ],
+  "returns": [
+    {
+      "id": "2c8c",
+      "saleId": "d72e",
+      "amount": 20000,
+      "type": "sale",
+      "date": "2026-04-17T16:54:02.383Z"
+    },
+    {
+      "id": "a59a",
+      "type": "purchase",
+      "productId": "1",
+      "productName": "Rice",
+      "qty": 18,
+      "amount": 900,
+      "date": "2026-04-17T17:27:15.873Z"
     }
   ]
 }

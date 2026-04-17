@@ -7,6 +7,7 @@ import Purchase from "./pages/Purchase";
 import Expenses from "./pages/Expenses";
 import SalesReturn from "./pages/SalesReturn";
 import MainLayout from "./layout/MainLayout";
+import PurchaseReturn from "./pages/PurchaseReturn";
 
 function App() {
   return (
@@ -20,8 +21,8 @@ function App() {
   <Route path="purchase" element={<Purchase />} />
   <Route path="sales" element={<Sales />} />
   <Route path="expenses" element={<Expenses />} />
-  <Route path="sales-return" element={<SalesReturn />} /> {/* 🔥 ADD THIS */}
-
+  <Route path="sales-return" element={<SalesReturn />} />
+<Route path="purchase-return" element={<PurchaseReturn />} />
 </Route>
     </Routes>
   );
