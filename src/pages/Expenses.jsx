@@ -13,7 +13,7 @@ const Expenses = () => {
 
   // 🔥 FETCH
   const fetchExpenses = async () => {
-    const res = await axios.get("http://localhost:3000/expenses");
+    const res = await axios.get("http://https://billing-system-zykh.onrender.com/expenses");
     setExpenses(res.data);
   };
 
@@ -30,7 +30,7 @@ const Expenses = () => {
       return;
     }
 
-    await axios.post("http://localhost:3000/expenses", {
+    await axios.post("http://https://billing-system-zykh.onrender.com/expenses", {
       ...form,
       amount: Number(form.amount),
       date: new Date().toISOString(),

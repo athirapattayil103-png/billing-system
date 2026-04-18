@@ -14,8 +14,8 @@ const Sales = () => {
 
   // 🔥 FETCH
   const fetchData = async () => {
-    const p = await axios.get("http://localhost:3000/products");
-    const s = await axios.get("http://localhost:3000/sales");
+    const p = await axios.get("http://https://billing-system-zykh.onrender.com/products");
+    const s = await axios.get("http://https://billing-system-zykh.onrender.com/sales");
 
     setProducts(p.data);
     setSales(s.data);
@@ -63,13 +63,13 @@ const Sales = () => {
     for (let item of cart) {
       const product = products.find((p) => p.id === item.id);
 
-      await axios.put(`http://localhost:3000/products/${product.id}`, {
+      await axios.put(`http://https://billing-system-zykh.onrender.com/products/${product.id}`, {
         ...product,
         stock: product.stock - item.qty,
       });
     }
 
-    await axios.post("http://localhost:3000/sales", {
+    await axios.post("http://https://billing-system-zykh.onrender.com/sales", {
       items: cart,
       total: totalAmount,
       date: new Date().toISOString(),

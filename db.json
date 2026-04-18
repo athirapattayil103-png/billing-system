@@ -11,7 +11,7 @@
       "id": "1",
       "name": "Rice",
       "price": 50,
-      "stock": 83,
+      "stock": 173,
       "minStock": 10,
       "category": "food"
     },
@@ -19,7 +19,7 @@
       "id": "d6d3",
       "name": "egg",
       "price": 10,
-      "stock": 20,
+      "stock": 10,
       "minStock": 19,
       "category": "grosery"
     },
@@ -57,6 +57,15 @@
       "cost": 10,
       "total": 10,
       "date": "2026-04-17T16:49:36.691Z"
+    },
+    {
+      "id": "98d0",
+      "productId": "1",
+      "productName": "Rice",
+      "quantity": 90,
+      "cost": 900,
+      "total": 900,
+      "date": "2026-04-17T18:03:28.605Z"
     }
   ],
   "sales": [
@@ -90,7 +99,14 @@
       "returned": true
     }
   ],
-  "expenses": [],
+  "expenses": [
+    {
+      "id": "e3c7",
+      "title": "just",
+      "amount": 10000,
+      "date": "2026-04-17T18:04:00.960Z"
+    }
+  ],
   "notifications": [
     {
       "id": "b794",
@@ -121,6 +137,16 @@
       "id": "231a",
       "message": "fan is low stock",
       "date": "2026-04-17T17:30:31.247Z"
+    },
+    {
+      "id": "0cfc",
+      "message": "egg is low stock",
+      "date": "2026-04-17T18:05:05.572Z"
+    },
+    {
+      "id": "6603",
+      "message": "egg is low stock",
+      "date": "2026-04-17T18:05:05.579Z"
     }
   ],
   "returns": [
@@ -139,6 +165,15 @@
       "qty": 18,
       "amount": 900,
       "date": "2026-04-17T17:27:15.873Z"
+    },
+    {
+      "id": "49d0",
+      "type": "purchase",
+      "productId": "d6d3",
+      "productName": "egg",
+      "qty": 10,
+      "amount": 100,
+      "date": "2026-04-17T18:04:47.446Z"
     }
   ]
 }

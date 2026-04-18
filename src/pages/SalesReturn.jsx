@@ -11,7 +11,7 @@ const SalesReturn = () => {
   // 🔥 FETCH RETURNS
   const fetchReturns = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/returns");
+      const res = await axios.get("http://https://billing-system-zykh.onrender.com/returns");
       setReturns(res.data);
     } catch {
       toast.error("Failed to load returns ❌");
@@ -30,7 +30,7 @@ const SalesReturn = () => {
     }
 
     try {
-      const res = await axios.get(`http://localhost:3000/sales/${saleId}`);
+      const res = await axios.get(`http://https://billing-system-zykh.onrender.com/sales/${saleId}`);
       setSale(res.data);
     } catch {
       toast.error("Sale not found ❌");
@@ -53,22 +53,22 @@ const SalesReturn = () => {
     try {
       // 🔥 UPDATE STOCK
       for (let item of sale.items) {
-        const p = await axios.get(`http://localhost:3000/products/${item.id}`);
+        const p = await axios.get(`http://https://billing-system-zykh.onrender.com/products/${item.id}`);
 
-        await axios.put(`http://localhost:3000/products/${item.id}`, {
+        await axios.put(`http://https://billing-system-zykh.onrender.com/products/${item.id}`, {
           ...p.data,
           stock: p.data.stock + item.qty,
         });
       }
 
       // 🔥 MARK SALE RETURNED
-      await axios.put(`http://localhost:3000/sales/${sale.id}`, {
+      await axios.put(`http://https://billing-system-zykh.onrender.com/sales/${sale.id}`, {
         ...sale,
         returned: true,
       });
 
       // 🔥 SAVE RETURN
-      await axios.post("http://localhost:3000/returns", {
+      await axios.post("http://https://billing-system-zykh.onrender.com/returns", {
         saleId: sale.id,
         amount: sale.total,
         type: "sale", // ✅ VERY IMPORTANT

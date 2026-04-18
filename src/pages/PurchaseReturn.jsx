@@ -14,8 +14,8 @@ const PurchaseReturn = () => {
 
   // 🔥 FETCH
   const fetchData = async () => {
-    const p = await axios.get("http://localhost:3000/products");
-    const r = await axios.get("http://localhost:3000/returns");
+    const p = await axios.get("http://https://billing-system-zykh.onrender.com/products");
+    const r = await axios.get("http://https://billing-system-zykh.onrender.com/returns");
 
     setProducts(p.data);
     setReturns(r.data);
@@ -49,13 +49,13 @@ const PurchaseReturn = () => {
     const amount = product.price * form.qty;
 
     // 🔥 REDUCE STOCK
-    await axios.put(`http://localhost:3000/products/${product.id}`, {
+    await axios.put(`http://https://billing-system-zykh.onrender.com/products/${product.id}`, {
       ...product,
       stock: product.stock - Number(form.qty),
     });
 
     // 🔥 SAVE RETURN
-    await axios.post("http://localhost:3000/returns", {
+    await axios.post("http://https://billing-system-zykh.onrender.com/returns", {
       type: "purchase",
       productId: product.id,
       productName: product.name,

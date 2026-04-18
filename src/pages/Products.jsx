@@ -18,13 +18,13 @@ const Products = () => {
   });
 
   const fetchProducts = async () => {
-    const res = await axios.get("http://localhost:3000/products");
+    const res = await axios.get("http://https://billing-system-zykh.onrender.com/products");
     setProducts(res.data);
 
     const lowStock = res.data.filter(p => p.stock < p.minStock);
 
     lowStock.forEach(async (p) => {
-      await axios.post("http://localhost:3000/notifications", {
+      await axios.post("http://https://billing-system-zykh.onrender.com/notifications", {
         message: `${p.name} is low stock`,
         date: new Date().toISOString(),
       });
@@ -43,7 +43,7 @@ const Products = () => {
     e.preventDefault();
 
     if (editId) {
-      await axios.put(`http://localhost:3000/products/${editId}`, {
+      await axios.put(`http://https://billing-system-zykh.onrender.com/products/${editId}`, {
         ...form,
         price: Number(form.price),
         stock: Number(form.stock),
@@ -52,7 +52,7 @@ const Products = () => {
       toast.success("Updated");
       setEditId(null);
     } else {
-      await axios.post("http://localhost:3000/products", {
+      await axios.post("http://https://billing-system-zykh.onrender.com/products", {
         ...form,
         price: Number(form.price),
         stock: Number(form.stock),
@@ -66,7 +66,7 @@ const Products = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:3000/products/${id}`);
+    await axios.delete(`http://https://billing-system-zykh.onrender.com/products/${id}`);
     toast.success("Deleted");
     fetchProducts();
   };

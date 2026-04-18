@@ -14,8 +14,8 @@ const Purchase = () => {
   });
 
   const fetchData = async () => {
-    const p = await axios.get("http://localhost:3000/products");
-    const pu = await axios.get("http://localhost:3000/purchases");
+    const p = await axios.get("http://https://billing-system-zykh.onrender.com/products");
+    const pu = await axios.get("http://https://billing-system-zykh.onrender.com/purchases");
 
     setProducts(p.data);
     setPurchases(pu.data);
@@ -48,13 +48,13 @@ const Purchase = () => {
     }
 
     // 🔥 UPDATE STOCK
-    await axios.put(`http://localhost:3000/products/${product.id}`, {
+    await axios.put(`http://https://billing-system-zykh.onrender.com/products/${product.id}`, {
       ...product,
       stock: product.stock + Number(form.quantity),
     });
 
     // 🔥 SAVE PURCHASE
-    await axios.post("http://localhost:3000/purchases", {
+    await axios.post("http://https://billing-system-zykh.onrender.com/purchases", {
       productId: form.productId,
       productName: product.name,
       quantity: Number(form.quantity),

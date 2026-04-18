@@ -21,7 +21,7 @@ const Login = () => {
     try {
       setLoading(true);
 
-      const res = await axios.get("http://localhost:3000/admin");
+      const res = await axios.get("http://https://billing-system-zykh.onrender.com/admin");
 
       const admin = res.data.find(
         (a) => a.email === email && a.password === password
