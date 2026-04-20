@@ -21,10 +21,10 @@ const Dashboard = () => {
   }, []);
 
   const fetchData = async () => {
-    const p = await axios.get("http://https://billing-system-zykh.onrender.com/products");
-    const s = await axios.get("http://https://billing-system-zykh.onrender.com/sales");
-    const pu = await axios.get("http://https://billing-system-zykh.onrender.com/purchases");
-    const e = await axios.get("http://https://billing-system-zykh.onrender.com/expenses");
+    const p = await axios.get("https://billing-system-zykh.onrender.com/products");
+    const s = await axios.get("https://billing-system-zykh.onrender.com/sales");
+    const pu = await axios.get("https://billing-system-zykh.onrender.com/purchases");
+    const e = await axios.get("https://billing-system-zykh.onrender.com/expenses");
 
     setProducts(p.data);
     setSales(s.data);
