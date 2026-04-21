@@ -99,7 +99,7 @@ const Sidebar = () => {
 </li>
        <li>
   <NavLink
-    to="/app/sales-return"
+    to="/app/reports"
     className={({ isActive }) =>
       `block p-2 rounded ${
         isActive ? "bg-gray-700" : "hover:bg-gray-700"
