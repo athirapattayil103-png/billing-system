@@ -87,14 +87,28 @@ const Sidebar = () => {
     Sales Return
   </NavLink>
 </li>
+<li>
 <NavLink to="/app/purchase-return"
   className={({ isActive }) =>
       `block p-2 rounded ${
         isActive ? "bg-gray-700" : "hover:bg-gray-700"
       }`
     }
-  >Purchase Return</NavLink>
-
+  >Purchase Return
+  </NavLink>
+</li>
+       <li>
+  <NavLink
+    to="/app/sales-return"
+    className={({ isActive }) =>
+      `block p-2 rounded ${
+        isActive ? "bg-gray-700" : "hover:bg-gray-700"
+      }`
+    }
+  >
+    Reports
+  </NavLink>
+</li>
       </ul>
 
     </div>
