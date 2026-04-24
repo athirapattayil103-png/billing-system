@@ -136,7 +136,7 @@ const Products = () => {
               category: "",
             });
           }}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-7 py-3 rounded-xl font-semibold shadow"
+          className="bg-green-500 hover:bg-green-800 text-white px-7 py-3 rounded-xl font-semibold shadow"
         >
           + Add Product
         </button>
