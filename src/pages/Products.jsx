@@ -112,19 +112,21 @@ const Products = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      {/* TOP SECTION */}
+    <div className="p-6 bg-[#f5f6fa] min-h-screen">
+      {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Products</h1>
-          <p className="text-gray-500">
+          <h1 className="text-4xl font-bold text-gray-900">
+            Products
+          </h1>
+          <p className="text-gray-500 mt-1">
             Manage your product inventory
           </p>
         </div>
 
         <button
           onClick={() => {
-            setShowForm(!showForm);
+            setShowForm(true);
             setEditId(null);
             setForm({
               name: "",
@@ -134,71 +136,122 @@ const Products = () => {
               category: "",
             });
           }}
-          className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow hover:bg-blue-700"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-7 py-3 rounded-xl font-semibold shadow"
         >
           + Add Product
         </button>
       </div>
 
-      {/* FORM */}
+      {/* POPUP FORM */}
       {showForm && (
-        <div className="bg-white p-6 rounded-2xl shadow mb-6">
-          <form onSubmit={handleSubmit} className="grid gap-4">
-            <input
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="Product Name"
-              className="border p-3 rounded"
-            />
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+          <div className="bg-white w-[420px] rounded-2xl shadow-2xl overflow-hidden">
 
-            <input
-              name="price"
-              value={form.price}
-              onChange={handleChange}
-              placeholder="Price"
-              className="border p-3 rounded"
-            />
+            {/* TOP BLUE HEADER */}
+            <div className="bg-blue-600 text-white p-5 flex justify-between items-center">
+              <div>
+                <p className="text-xs opacity-80">
+                  New product entry
+                </p>
+                <h2 className="text-2xl font-bold">
+                  {editId ? "Edit Product" : "Add Product"}
+                </h2>
+              </div>
 
-            <input
-              name="stock"
-              value={form.stock}
-              onChange={handleChange}
-              placeholder="Stock"
-              className="border p-3 rounded"
-            />
+              <button
+                onClick={() => {
+                  setShowForm(false);
+                  setEditId(null);
+                }}
+                className="text-2xl"
+              >
+                ×
+              </button>
+            </div>
 
-            <input
-              name="minStock"
-              value={form.minStock}
-              onChange={handleChange}
-              placeholder="Min Stock"
-              className="border p-3 rounded"
-            />
+            {/* FORM BODY */}
+            <form onSubmit={handleSubmit} className="p-5 space-y-4">
+              <div>
+                <p className="text-sm mb-1">Product Name</p>
+                <input
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Product Name"
+                  className="w-full border p-3 rounded-lg"
+                />
+              </div>
 
-            <input
-              name="category"
-              value={form.category}
-              onChange={handleChange}
-              placeholder="Category"
-              className="border p-3 rounded"
-            />
+              <div>
+                <p className="text-sm mb-1">Price</p>
+                <input
+                  name="price"
+                  value={form.price}
+                  onChange={handleChange}
+                  placeholder="Price"
+                  className="w-full border p-3 rounded-lg"
+                />
+              </div>
 
-            <button className="bg-blue-600 text-white p-3 rounded-lg">
-              {editId ? "Update Product" : "Add Product"}
-            </button>
-          </form>
+              <div>
+                <p className="text-sm mb-1">Stock</p>
+                <input
+                  name="stock"
+                  value={form.stock}
+                  onChange={handleChange}
+                  placeholder="Stock"
+                  className="w-full border p-3 rounded-lg"
+                />
+              </div>
+
+              <div>
+                <p className="text-sm mb-1">Min Stock</p>
+                <input
+                  name="minStock"
+                  value={form.minStock}
+                  onChange={handleChange}
+                  placeholder="Min Stock"
+                  className="w-full border p-3 rounded-lg"
+                />
+              </div>
+
+              <div>
+                <p className="text-sm mb-1">Category</p>
+                <input
+                  name="category"
+                  value={form.category}
+                  onChange={handleChange}
+                  placeholder="Category"
+                  className="w-full border p-3 rounded-lg"
+                />
+              </div>
+
+              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-xl font-semibold">
+                {editId ? "Update Product" : "Add Product"}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setShowForm(false)}
+                className="w-full bg-gray-100 p-3 rounded-xl"
+              >
+                Cancel
+              </button>
+            </form>
+          </div>
         </div>
       )}
 
       {/* TABLE */}
-      <div className="bg-white p-6 rounded-2xl shadow">
-        <h2 className="text-xl font-semibold mb-4">Product List</h2>
+      <div className="bg-white rounded-2xl shadow p-6">
+        <h2 className="text-xl font-semibold mb-6">
+          Product List
+        </h2>
 
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b text-left text-gray-600">
-              <th className="py-3">#</th>
+            <tr className="text-left text-gray-500 border-b">
+              <th className="py-4">#</th>
               <th>Name</th>
               <th>Price</th>
               <th>Stock</th>
@@ -210,30 +263,37 @@ const Products = () => {
           <tbody>
             {products.map((p, index) => (
               <tr key={p.id} className="border-b">
-                <td className="py-4">{index + 1}</td>
+                <td className="py-5">{index + 1}</td>
+
                 <td>{p.name}</td>
-                <td className="text-blue-600">₹{p.price}</td>
+
+                <td className="text-blue-600 font-medium">
+                  ₹{p.price}
+                </td>
+
                 <td>
                   {p.stock}
+
                   {Number(p.stock) < Number(p.minStock) && (
                     <span className="text-red-500 ml-2 text-xs font-semibold">
                       Low Stock
                     </span>
                   )}
                 </td>
+
                 <td>{p.category}</td>
 
-                <td className="flex gap-2 py-3">
+                <td className="flex gap-2 py-4">
                   <button
                     onClick={() => handleEdit(p)}
-                    className="bg-yellow-400 px-4 py-1 rounded"
+                    className="bg-yellow-400 px-4 py-2 rounded-md text-sm"
                   >
                     Edit
                   </button>
 
                   <button
                     onClick={() => handleDelete(p.id)}
-                    className="bg-red-500 text-white px-4 py-1 rounded"
+                    className="bg-red-500 text-white px-4 py-2 rounded-md text-sm"
                   >
                     Delete
                   </button>
