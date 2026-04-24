@@ -7,6 +7,7 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState(null);
+  const [showAll, setShowAll] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -111,6 +112,11 @@ const Products = () => {
     setShowForm(true);
   };
 
+  // SEE MORE LOGIC
+  const visibleProducts = showAll
+    ? products
+    : products.slice(0, 4);
+
   return (
     <div className="p-6 bg-[#f5f6fa] min-h-screen">
       {/* HEADER */}
@@ -147,7 +153,7 @@ const Products = () => {
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
           <div className="bg-white w-[420px] rounded-2xl shadow-2xl overflow-hidden">
 
-            {/* TOP BLUE HEADER */}
+            {/* HEADER */}
             <div className="bg-green-500 text-white p-5 flex justify-between items-center">
               <div>
                 <p className="text-xs opacity-80">
@@ -169,8 +175,9 @@ const Products = () => {
               </button>
             </div>
 
-            {/* FORM BODY */}
+            {/* FORM */}
             <form onSubmit={handleSubmit} className="p-5 space-y-4">
+
               <div>
                 <p className="text-sm mb-1">Product Name</p>
                 <input
@@ -226,7 +233,7 @@ const Products = () => {
                 />
               </div>
 
-              <button className="w-full bg-green-500 hover:bg-blue-700 text-white p-3 rounded-xl font-semibold">
+              <button className="w-full bg-green-500 text-white p-3 rounded-xl font-semibold">
                 {editId ? "Update Product" : "Add Product"}
               </button>
 
@@ -237,6 +244,7 @@ const Products = () => {
               >
                 Cancel
               </button>
+
             </form>
           </div>
         </div>
@@ -261,7 +269,7 @@ const Products = () => {
           </thead>
 
           <tbody>
-            {products.map((p, index) => (
+            {visibleProducts.map((p, index) => (
               <tr key={p.id} className="border-b">
                 <td className="py-5">{index + 1}</td>
 
@@ -273,7 +281,6 @@ const Products = () => {
 
                 <td>
                   {p.stock}
-
                   {Number(p.stock) < Number(p.minStock) && (
                     <span className="text-red-500 ml-2 text-xs font-semibold">
                       Low Stock
@@ -302,6 +309,18 @@ const Products = () => {
             ))}
           </tbody>
         </table>
+
+        {/* SEE MORE BUTTON */}
+        {products.length > 4 && (
+          <div className="flex justify-center mt-6">
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className="bg-gray-200 hover:bg-gray-300 px-6 py-2 rounded-lg font-medium"
+            >
+              {showAll ? "Show Less" : "See More"}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
