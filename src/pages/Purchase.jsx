@@ -305,6 +305,7 @@ const Purchase = () => {
   const [purchases, setPurchases] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  const [editId, setEditId] = useState(null);
 
   const [form, setForm] = useState({
     productId: "",
@@ -338,7 +339,20 @@ const Purchase = () => {
     });
   };
 
-  // ADD PURCHASE
+  // EDIT
+  const handleEdit = (item) => {
+    setForm({
+      productId: item.productId || "",
+      quantity: item.quantity || 1,
+      cost: item.cost || "",
+      supplier: item.customer || "",
+    });
+
+    setEditId(item.id);
+    setShowModal(true);
+  };
+
+  // ADD / UPDATE PURCHASE
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -361,23 +375,42 @@ const Purchase = () => {
       const cost = Number(form.cost);
       const total = quantity * cost;
 
-      // UPDATE STOCK
+      // UPDATE PRODUCT STOCK
       await axios.put(`${BASE_URL}/products/${selectedProduct.id}`, {
         ...selectedProduct,
         stock: Number(selectedProduct.stock) + quantity,
       });
 
-      // SAVE PURCHASE
-      await axios.post(`${BASE_URL}/purchases`, {
-        customer: form.supplier || "-",
-        productName: selectedProduct.name,
-        quantity,
-        cost,
-        total,
-        date: new Date().toISOString(),
-      });
+      // UPDATE PURCHASE
+      if (editId) {
+        await axios.put(`${BASE_URL}/purchases/${editId}`, {
+          id: editId,
+          customer: form.supplier || "-",
+          productId: selectedProduct.id,
+          productName: selectedProduct.name,
+          quantity,
+          cost,
+          total,
+          date: new Date().toISOString(),
+        });
 
-      toast.success("Purchase Added Successfully ✅");
+        toast.success("Purchase Updated Successfully ✅");
+      }
+
+      // ADD PURCHASE
+      else {
+        await axios.post(`${BASE_URL}/purchases`, {
+          customer: form.supplier || "-",
+          productId: selectedProduct.id,
+          productName: selectedProduct.name,
+          quantity,
+          cost,
+          total,
+          date: new Date().toISOString(),
+        });
+
+        toast.success("Purchase Added Successfully ✅");
+      }
 
       setForm({
         productId: "",
@@ -386,6 +419,7 @@ const Purchase = () => {
         supplier: "",
       });
 
+      setEditId(null);
       setShowModal(false);
       fetchData();
     } catch (error) {
@@ -412,7 +446,7 @@ const Purchase = () => {
 
   const totalPurchaseCount = purchases.length;
 
-  // SEE MORE LOGIC
+  // SEE MORE
   const visiblePurchases = showAll
     ? purchases
     : purchases.slice(0, 4);
@@ -429,8 +463,17 @@ const Purchase = () => {
         </div>
 
         <button
-          onClick={() => setShowModal(true)}
-          className="bg-green-500 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold"
+          onClick={() => {
+            setShowModal(true);
+            setEditId(null);
+            setForm({
+              productId: "",
+              quantity: 1,
+              cost: "",
+              supplier: "",
+            });
+          }}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold"
         >
           + Add Purchase
         </button>
@@ -492,7 +535,15 @@ const Purchase = () => {
                   <td>
                     {new Date(item.date).toLocaleString()}
                   </td>
-                  <td>
+
+                  <td className="flex gap-2 py-3">
+                    <button
+                      onClick={() => handleEdit(item)}
+                      className="bg-yellow-400 px-4 py-2 rounded-lg"
+                    >
+                      Edit
+                    </button>
+
                     <button
                       onClick={() => handleDelete(item.id)}
                       className="bg-red-500 text-white px-4 py-2 rounded-lg"
@@ -506,7 +557,7 @@ const Purchase = () => {
           </table>
         </div>
 
-        {/* SEE MORE BUTTON */}
+        {/* SEE MORE */}
         {purchases.length > 4 && (
           <div className="flex justify-center mt-6">
             <button
@@ -525,14 +576,14 @@ const Purchase = () => {
           <div className="bg-white rounded-2xl w-[360px] shadow-2xl overflow-hidden">
 
             {/* HEADER */}
-            <div className="bg-green-500 text-white p-5">
+            <div className="bg-blue-600 text-white p-5">
               <div className="flex justify-between items-start">
                 <div>
                   <p className="text-xs opacity-80">
                     New stock entry
                   </p>
                   <h2 className="text-2xl font-bold">
-                    New Purchase
+                    {editId ? "Edit Purchase" : "New Purchase"}
                   </h2>
                 </div>
 
@@ -615,8 +666,8 @@ const Purchase = () => {
                 />
               </div>
 
-              <button className="w-full bg-green-500 text-white py-3 rounded-xl font-semibold">
-                Add Stock
+              <button className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold">
+                {editId ? "Update Purchase" : "Add Stock"}
               </button>
 
               <button
