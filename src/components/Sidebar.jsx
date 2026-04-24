@@ -123,25 +123,18 @@ import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
   return (
-    <div className="w-60 h-screen bg-[#071226] text-white p-4">
+    <div className="w-60 h-screen sticky top-0 bg-gray-900 text-white p-4 overflow-y-auto">
 
-      {/* LOGO */}
-      <h2 className="text-2xl font-bold mb-8">
-        Billing
-      </h2>
+      <h2 className="text-xl font-bold mb-6">Billing App</h2>
 
-      {/* MENU */}
-      <ul className="space-y-4">
+      <ul className="space-y-3">
 
-        {/* Dashboard */}
         <li>
           <NavLink
             to="/app/dashboard"
             className={({ isActive }) =>
-              `block px-4 py-3 rounded-lg transition ${
-                isActive
-                  ? "bg-blue-500 text-white"
-                  : "hover:bg-gray-700"
+              `block p-2 rounded transition ${
+                isActive ? "bg-gray-700" : "hover:bg-gray-700"
               }`
             }
           >
@@ -149,15 +142,12 @@ const Sidebar = () => {
           </NavLink>
         </li>
 
-        {/* Products */}
         <li>
           <NavLink
             to="/app/products"
             className={({ isActive }) =>
-              `block px-4 py-3 rounded-lg transition ${
-                isActive
-                  ? "bg-blue-500 text-white"
-                  : "hover:bg-gray-700"
+              `block p-2 rounded transition ${
+                isActive ? "bg-gray-700" : "hover:bg-gray-700"
               }`
             }
           >
@@ -165,31 +155,12 @@ const Sidebar = () => {
           </NavLink>
         </li>
 
-        {/* Sales */}
-        <li>
-          <NavLink
-            to="/app/sales"
-            className={({ isActive }) =>
-              `block px-4 py-3 rounded-lg transition ${
-                isActive
-                  ? "bg-blue-500 text-white"
-                  : "hover:bg-gray-700"
-              }`
-            }
-          >
-            Sales
-          </NavLink>
-        </li>
-
-        {/* Purchase */}
         <li>
           <NavLink
             to="/app/purchase"
             className={({ isActive }) =>
-              `block px-4 py-3 rounded-lg transition ${
-                isActive
-                  ? "bg-blue-500 text-white"
-                  : "hover:bg-gray-700"
+              `block p-2 rounded transition ${
+                isActive ? "bg-gray-700" : "hover:bg-gray-700"
               }`
             }
           >
@@ -197,15 +168,25 @@ const Sidebar = () => {
           </NavLink>
         </li>
 
-        {/* Returns ONLY (Sales Return + Purchase Return removed) */}
+        <li>
+          <NavLink
+            to="/app/sales"
+            className={({ isActive }) =>
+              `block p-2 rounded transition ${
+                isActive ? "bg-gray-700" : "hover:bg-gray-700"
+              }`
+            }
+          >
+            Sales
+          </NavLink>
+        </li>
+
         <li>
           <NavLink
             to="/app/returns"
             className={({ isActive }) =>
-              `block px-4 py-3 rounded-lg transition ${
-                isActive
-                  ? "bg-blue-500 text-white"
-                  : "hover:bg-gray-700"
+              `block p-2 rounded transition ${
+                isActive ? "bg-gray-700" : "hover:bg-gray-700"
               }`
             }
           >
@@ -213,15 +194,12 @@ const Sidebar = () => {
           </NavLink>
         </li>
 
-        {/* Expenses */}
         <li>
           <NavLink
             to="/app/expenses"
             className={({ isActive }) =>
-              `block px-4 py-3 rounded-lg transition ${
-                isActive
-                  ? "bg-blue-500 text-white"
-                  : "hover:bg-gray-700"
+              `block p-2 rounded transition ${
+                isActive ? "bg-gray-700" : "hover:bg-gray-700"
               }`
             }
           >
@@ -229,15 +207,12 @@ const Sidebar = () => {
           </NavLink>
         </li>
 
-        {/* Reports */}
         <li>
           <NavLink
             to="/app/reports"
             className={({ isActive }) =>
-              `block px-4 py-3 rounded-lg transition ${
-                isActive
-                  ? "bg-blue-500 text-white"
-                  : "hover:bg-gray-700"
+              `block p-2 rounded transition ${
+                isActive ? "bg-gray-700" : "hover:bg-gray-700"
               }`
             }
           >
