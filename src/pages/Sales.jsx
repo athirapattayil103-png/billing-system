@@ -1,253 +1,27 @@
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import toast from "react-hot-toast";
-
-// const Sales = () => {
-//   const [products, setProducts] = useState([]);
-//   const [cart, setCart] = useState([]);
-//   const [sales, setSales] = useState([]);
-
-//   const [selectedProduct, setSelectedProduct] = useState("");
-//   const [quantity, setQuantity] = useState("");
-
-//   const [activeTab, setActiveTab] = useState("sales");
-
-//   // 🔥 FETCH
-//   const fetchData = async () => {
-//     const p = await axios.get("https://billing-system-zykh.onrender.com/products");
-//     const s = await axios.get("https://billing-system-zykh.onrender.com/sales");
-
-//     setProducts(p.data);
-//     setSales(s.data);
-//   };
-
-//   useEffect(() => {
-//     fetchData();
-//   }, []);
-
-//   // 🔥 ADD TO CART
-//   const addToCart = () => {
-//     if (!selectedProduct || !quantity) {
-//       toast.error("Select product and quantity ❌");
-//       return;
-//     }
-
-//     const product = products.find((p) => p.id == selectedProduct);
-
-//     if (product.stock < quantity) {
-//       toast.error("Not enough stock ❌");
-//       return;
-//     }
-
-//     const item = {
-//       ...product,
-//       qty: Number(quantity),
-//       total: product.price * quantity,
-//     };
-
-//     setCart([...cart, item]);
-//     setSelectedProduct("");
-//     setQuantity("");
-//   };
-
-//   // 🔥 TOTAL
-//   const totalAmount = cart.reduce((sum, item) => sum + item.total, 0);
-
-//   // 🔥 COMPLETE SALE
-//   const handleSale = async () => {
-//     if (cart.length === 0) {
-//       toast.error("Cart empty ❌");
-//       return;
-//     }
-
-//     for (let item of cart) {
-//       const product = products.find((p) => p.id === item.id);
-
-//       await axios.put(`https://billing-system-zykh.onrender.com/products/${product.id}`, {
-//         ...product,
-//         stock: product.stock - item.qty,
-//       });
-//     }
-
-//     await axios.post("https://billing-system-zykh.onrender.com/sales", {
-//       items: cart,
-//       total: totalAmount,
-//       date: new Date().toISOString(),
-//     });
-
-//     toast.success("Sale completed 💰");
-
-//     setCart([]);
-//     fetchData();
-//   };
-
-//   return (
-//     <div className="p-6 bg-gradient-to-br from-blue-50 to-white min-h-screen">
-
-//       <h1 className="text-3xl font-bold mb-6">Sales 🧾</h1>
-
-//       {/* TABS */}
-//       <div className="flex gap-3 mb-6">
-//         <button
-//           onClick={() => setActiveTab("sales")}
-//           className={`px-4 py-2 rounded ${
-//             activeTab === "sales" ? "bg-blue-600 text-white" : "bg-gray-200"
-//           }`}
-//         >
-//           Sales
-//         </button>
-
-//         <button
-//           onClick={() => setActiveTab("history")}
-//           className={`px-4 py-2 rounded ${
-//             activeTab === "history" ? "bg-blue-600 text-white" : "bg-gray-200"
-//           }`}
-//         >
-//           History
-//         </button>
-//       </div>
-
-//       {/* SALES TAB */}
-//       {activeTab === "sales" && (
-//         <div className="grid md:grid-cols-2 gap-6">
-
-//           {/* LEFT - BILL */}
-//           <div className="bg-white p-5 rounded-xl shadow">
-
-//             <h2 className="font-semibold mb-3">New Sale</h2>
-
-//             <div className="flex gap-2 mb-4">
-//               <select
-//                 value={selectedProduct}
-//                 onChange={(e) => setSelectedProduct(e.target.value)}
-//                 className="border p-2 rounded w-full"
-//               >
-//                 <option value="">Select Product</option>
-//                 {products.map((p) => (
-//                   <option key={p.id} value={p.id}>
-//                     {p.name} (Stock: {p.stock})
-//                   </option>
-//                 ))}
-//               </select>
-
-//               <input
-//                 type="number"
-//                 placeholder="Qty"
-//                 value={quantity}
-//                 onChange={(e) => setQuantity(e.target.value)}
-//                 className="border p-2 rounded w-24"
-//               />
-
-//               <button
-//                 onClick={addToCart}
-//                 className="bg-blue-600 text-white px-4 rounded"
-//               >
-//                 Add
-//               </button>
-//             </div>
-
-//             {/* CART */}
-//             <div className="space-y-2 mb-4">
-//               {cart.map((item, i) => (
-//                 <div key={i} className="flex justify-between border-b pb-1">
-//                   <p>{item.name} x {item.qty}</p>
-//                   <p>₹{item.total}</p>
-//                 </div>
-//               ))}
-//             </div>
-
-//             <h2 className="text-lg font-bold mb-3">
-//               Total: ₹{totalAmount}
-//             </h2>
-
-//             <button
-//               onClick={handleSale}
-//               className="bg-green-600 text-white w-full py-2 rounded"
-//             >
-//               Complete Sale
-//             </button>
-
-//           </div>
-
-//           {/* RIGHT - RECENT SALES */}
-//           <div className="bg-white p-5 rounded-xl shadow">
-
-//             <h2 className="font-semibold mb-3">Recent Sales</h2>
-
-//             {sales.slice(-5).reverse().map((s, i) => (
-//               <div key={i} className="border-b py-2 text-sm">
-//                 <p>₹{s.total}</p>
-//                 <p className="text-gray-400">
-//                   {new Date(s.date).toLocaleString()}
-//                 </p>
-//               </div>
-//             ))}
-
-//           </div>
-
-//         </div>
-//       )}
-
-//       {/* HISTORY TAB */}
-//       {activeTab === "history" && (
-//         <div className="bg-white p-5 rounded-xl shadow">
-
-//           <h2 className="font-semibold mb-3">Sales History</h2>
-
-//           <table className="w-full text-left">
-//             <thead>
-//               <tr className="border-b">
-//                 <th className="p-2">Total</th>
-//                 <th className="p-2">Date</th>
-//               </tr>
-//             </thead>
-
-//             <tbody>
-//               {sales.map((s) => (
-//                 <tr key={s.id} className="border-b">
-//                   <td className="p-2">₹{s.total}</td>
-//                   <td className="p-2">
-//                     {new Date(s.date).toLocaleString()}
-//                   </td>
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-
-//         </div>
-//       )}
-
-//     </div>
-//   );
-// };
-
-// export default Sales;
-
-
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { BASE_URL } from "../api"; // ✅ IMPORTANT
+import { BASE_URL } from "../api";
 
 const Sales = () => {
   const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState([]);
   const [sales, setSales] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
-  const [selectedProduct, setSelectedProduct] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [form, setForm] = useState({
+    customer: "",
+    productId: "",
+    quantity: 1,
+  });
 
-  const [activeTab, setActiveTab] = useState("sales");
-
-  // 🔥 FETCH DATA
+  // FETCH DATA
   const fetchData = async () => {
     try {
       const p = await axios.get(`${BASE_URL}/products`);
       const s = await axios.get(`${BASE_URL}/sales`);
 
       setProducts(p.data);
-      setSales(s.data);
+      setSales(s.data.reverse());
     } catch (err) {
       toast.error("Failed to load data ❌");
     }
@@ -257,213 +31,262 @@ const Sales = () => {
     fetchData();
   }, []);
 
-  // 🔥 ADD TO CART
-  const addToCart = () => {
-    if (!selectedProduct || !quantity) {
-      toast.error("Select product and quantity ❌");
-      return;
-    }
-
-    const product = products.find((p) => p.id === selectedProduct);
-
-    if (!product) {
-      toast.error("Product not found ❌");
-      return;
-    }
-
-    if (product.stock < Number(quantity)) {
-      toast.error("Not enough stock ❌");
-      return;
-    }
-
-    const item = {
-      ...product,
-      qty: Number(quantity),
-      total: product.price * Number(quantity),
-    };
-
-    setCart([...cart, item]);
-    setSelectedProduct("");
-    setQuantity("");
+  // HANDLE INPUT
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  // 🔥 TOTAL
-  const totalAmount = cart.reduce((sum, item) => sum + item.total, 0);
+  // COMPLETE SALE
+  const handleSale = async (e) => {
+    e.preventDefault();
 
-  // 🔥 COMPLETE SALE
-  const handleSale = async () => {
-    if (cart.length === 0) {
-      toast.error("Cart empty ❌");
+    if (!form.productId || !form.quantity) {
+      toast.error("Fill all fields ❌");
       return;
     }
 
     try {
-      // ✅ UPDATE STOCK
-      for (let item of cart) {
-        const product = products.find((p) => p.id === item.id);
+      const selectedProduct = products.find(
+        (p) => String(p.id) === String(form.productId)
+      );
 
-        await axios.put(`${BASE_URL}/products/${product.id}`, {
-          ...product,
-          stock: product.stock - item.qty,
-        });
+      if (!selectedProduct) {
+        toast.error("Product not found ❌");
+        return;
       }
 
-      // ✅ SAVE SALE
+      const quantity = Number(form.quantity);
+
+      if (Number(selectedProduct.stock) < quantity) {
+        toast.error("Not enough stock ❌");
+        return;
+      }
+
+      const total = Number(selectedProduct.price) * quantity;
+
+      // UPDATE STOCK
+      await axios.put(`${BASE_URL}/products/${selectedProduct.id}`, {
+        ...selectedProduct,
+        stock: Number(selectedProduct.stock) - quantity,
+      });
+
+      // SAVE SALE
       await axios.post(`${BASE_URL}/sales`, {
-        items: cart,
-        total: totalAmount,
+        customer: form.customer || "-",
+        productName: selectedProduct.name,
+        price: Number(selectedProduct.price),
+        quantity,
+        total,
         date: new Date().toISOString(),
       });
 
       toast.success("Sale completed 💰");
 
-      setCart([]);
-      fetchData();
+      setForm({
+        customer: "",
+        productId: "",
+        quantity: 1,
+      });
 
+      setShowModal(false);
+      fetchData();
     } catch (err) {
       toast.error("Error completing sale ❌");
     }
   };
 
+  // DELETE
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${BASE_URL}/sales/${id}`);
+      toast.success("Deleted Successfully");
+      fetchData();
+    } catch (error) {
+      toast.error("Delete Failed ❌");
+    }
+  };
+
+  // TOTALS
+  const totalRevenue = sales.reduce(
+    (sum, item) => sum + Number(item.total || 0),
+    0
+  );
+
+  const totalTransactions = sales.length;
+
   return (
-    <div className="p-6 bg-gradient-to-br from-blue-50 to-white min-h-screen">
-
-      <h1 className="text-3xl font-bold mb-6">Sales 🧾</h1>
-
-      {/* TABS */}
-      <div className="flex gap-3 mb-6">
-        <button
-          onClick={() => setActiveTab("sales")}
-          className={`px-4 py-2 rounded ${
-            activeTab === "sales"
-              ? "bg-blue-600 text-white"
-              : "bg-gray-200"
-          }`}
-        >
-          Sales
-        </button>
+    <div className="p-6 bg-[#f5f6fa] min-h-screen">
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-4xl font-bold">Sales</h1>
+          <p className="text-gray-500">
+            {totalTransactions} transactions recorded
+          </p>
+        </div>
 
         <button
-          onClick={() => setActiveTab("history")}
-          className={`px-4 py-2 rounded ${
-            activeTab === "history"
-              ? "bg-blue-600 text-white"
-              : "bg-gray-200"
-          }`}
+          onClick={() => setShowModal(true)}
+          className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-semibold shadow"
         >
-          History
+          + Add Sale
         </button>
       </div>
 
-      {/* SALES */}
-      {activeTab === "sales" && (
-        <div className="grid md:grid-cols-2 gap-6">
-
-          <div className="bg-white p-5 rounded-xl shadow">
-
-            <h2 className="font-semibold mb-3">New Sale</h2>
-
-            <div className="flex gap-2 mb-4">
-              <select
-                value={selectedProduct}
-                onChange={(e) => setSelectedProduct(e.target.value)}
-                className="border p-2 rounded w-full"
-              >
-                <option value="">Select Product</option>
-                {products.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.name} (Stock: {p.stock})
-                  </option>
-                ))}
-              </select>
-
-              <input
-                type="number"
-                placeholder="Qty"
-                value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
-                className="border p-2 rounded w-24"
-              />
-
-              <button
-                onClick={addToCart}
-                className="bg-blue-600 text-white px-4 rounded"
-              >
-                Add
-              </button>
-            </div>
-
-            {/* CART */}
-            <div className="space-y-2 mb-4">
-              {cart.map((item, i) => (
-                <div key={i} className="flex justify-between border-b pb-1">
-                  <p>{item.name} x {item.qty}</p>
-                  <p>₹{item.total}</p>
-                </div>
-              ))}
-            </div>
-
-            <h2 className="text-lg font-bold mb-3">
-              Total: ₹{totalAmount}
-            </h2>
-
-            <button
-              onClick={handleSale}
-              className="bg-green-600 text-white w-full py-2 rounded"
-            >
-              Complete Sale
-            </button>
-
-          </div>
-
-          {/* RECENT */}
-          <div className="bg-white p-5 rounded-xl shadow">
-
-            <h2 className="font-semibold mb-3">Recent Sales</h2>
-
-            {sales.slice(-5).reverse().map((s, i) => (
-              <div key={i} className="border-b py-2 text-sm">
-                <p>₹{s.total}</p>
-                <p className="text-gray-400">
-                  {new Date(s.date).toLocaleString()}
-                </p>
-              </div>
-            ))}
-
-          </div>
-
+      {/* TOP CARDS */}
+      <div className="grid md:grid-cols-2 gap-4 mb-6">
+        <div className="bg-white rounded-2xl shadow p-6 text-center">
+          <p className="text-sm text-gray-500">Total Revenue</p>
+          <h2 className="text-3xl font-bold text-green-600">
+            ₹{totalRevenue}
+          </h2>
         </div>
-      )}
 
-      {/* HISTORY */}
-      {activeTab === "history" && (
-        <div className="bg-white p-5 rounded-xl shadow">
+        <div className="bg-white rounded-2xl shadow p-6 text-center">
+          <p className="text-sm text-gray-500">Total Transactions</p>
+          <h2 className="text-3xl font-bold">{totalTransactions}</h2>
+        </div>
+      </div>
 
-          <h2 className="font-semibold mb-3">Sales History</h2>
+      {/* SALES HISTORY */}
+      <div className="bg-white rounded-2xl shadow p-6">
+        <h2 className="text-xl font-bold mb-4">Sales History</h2>
 
-          <table className="w-full text-left">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
             <thead>
-              <tr className="border-b">
-                <th className="p-2">Total</th>
-                <th className="p-2">Date</th>
+              <tr className="text-left border-b">
+                <th className="py-3">#</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th>Date</th>
+                <th>Actions</th>
               </tr>
             </thead>
 
             <tbody>
-              {sales.map((s) => (
-                <tr key={s.id} className="border-b">
-                  <td className="p-2">₹{s.total}</td>
-                  <td className="p-2">
-                    {new Date(s.date).toLocaleString()}
+              {sales.map((item, index) => (
+                <tr key={item.id} className="border-b">
+                  <td className="py-4">{index + 1}</td>
+                  <td>{item.customer || "-"}</td>
+                  <td>{item.productName || "-"}</td>
+                  <td>₹{item.price}</td>
+                  <td>{item.quantity}</td>
+                  <td className="text-green-600 font-semibold">
+                    ₹{item.total}
+                  </td>
+                  <td>{new Date(item.date).toLocaleString()}</td>
+                  <td>
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg"
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+      </div>
 
+      {/* MODAL */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+          <div className="bg-white rounded-2xl w-[360px] shadow-2xl overflow-hidden">
+            
+            {/* GREEN HEADER */}
+            <div className="bg-green-600 text-white p-5">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-xs opacity-80">
+                    New transaction
+                  </p>
+                  <h2 className="text-2xl font-bold">
+                    New Sale
+                  </h2>
+                </div>
+
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="text-xl"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+
+            {/* FORM */}
+            <form onSubmit={handleSale} className="p-5 space-y-4">
+              <div>
+                <label className="text-sm text-gray-500">
+                  Customer Name
+                </label>
+                <input
+                  type="text"
+                  name="customer"
+                  placeholder="Enter customer name"
+                  value={form.customer}
+                  onChange={handleChange}
+                  className="border p-3 rounded-lg w-full"
+                />
+              </div>
+
+              <div>
+                <label className="text-sm text-gray-500">
+                  Product
+                </label>
+                <select
+                  name="productId"
+                  value={form.productId}
+                  onChange={handleChange}
+                  className="border p-3 rounded-lg w-full"
+                >
+                  <option value="">Select Product</option>
+
+                  {products.map((product) => (
+                    <option key={product.id} value={product.id}>
+                      {product.name} (Stock: {product.stock})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="text-sm text-gray-500">
+                  Quantity
+                </label>
+                <input
+                  type="number"
+                  name="quantity"
+                  value={form.quantity}
+                  onChange={handleChange}
+                  className="border p-3 rounded-lg w-full"
+                />
+              </div>
+
+              <button className="w-full bg-green-600 text-white py-3 rounded-xl font-semibold">
+                Complete Sale
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="w-full bg-gray-100 py-3 rounded-xl"
+              >
+                Cancel
+              </button>
+            </form>
+          </div>
         </div>
       )}
-
     </div>
   );
 };
