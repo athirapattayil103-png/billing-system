@@ -80,7 +80,7 @@
 //             className={`w-full py-2 rounded-lg text-white font-semibold transition ${
 //               loading
 //                 ? "bg-gray-400"
-//                 : "bg-blue-500 hover:bg-blue-600"
+//                 : "bg-blue-500 hover:bg-green-500"
 //             }`}
 //           >
 //             {loading ? "Logging in..." : "Login"}
@@ -193,7 +193,7 @@ const Login = () => {
             className={`w-full py-2 rounded-lg text-white font-semibold transition ${
               loading
                 ? "bg-gray-400"
-                : "bg-blue-500 hover:bg-blue-600"
+                : "bg-blue-500 hover:bg-green-500"
             }`}
           >
             {loading ? "Logging in..." : "Login"}

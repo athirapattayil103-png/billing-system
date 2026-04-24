@@ -127,7 +127,7 @@ const Purchase = () => {
 
         <button
           onClick={() => setShowModal(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold"
+          className="bg-green-500 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold"
         >
           + Add Purchase
         </button>
@@ -199,7 +199,7 @@ const Purchase = () => {
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
           <div className="bg-white rounded-2xl w-[360px] shadow-2xl overflow-hidden">
             {/* TOP BLUE HEADER */}
-            <div className="bg-blue-600 text-white p-5">
+            <div className="bg-green-500 text-white p-5">
               <div className="flex justify-between items-start">
                 <div>
                   <p className="text-xs opacity-80">New stock entry</p>
@@ -251,7 +251,7 @@ const Purchase = () => {
                   type="number"
                   name="cost"
                   placeholder="Cost Price"
-                  value={form.cost}
+                  value={form.cost}   
                   onChange={handleChange}
                   className="border p-3 rounded-lg w-full"
                 />
@@ -271,7 +271,7 @@ const Purchase = () => {
                 />
               </div>
 
-              <button className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold">
+              <button className="w-full bg-green-500 text-white py-3 rounded-xl font-semibold">
                 Add Stock
               </button>
 

@@ -148,7 +148,7 @@ const Products = () => {
           <div className="bg-white w-[420px] rounded-2xl shadow-2xl overflow-hidden">
 
             {/* TOP BLUE HEADER */}
-            <div className="bg-blue-600 text-white p-5 flex justify-between items-center">
+            <div className="bg-green-500 text-white p-5 flex justify-between items-center">
               <div>
                 <p className="text-xs opacity-80">
                   New product entry
@@ -226,7 +226,7 @@ const Products = () => {
                 />
               </div>
 
-              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-xl font-semibold">
+              <button className="w-full bg-green-500 hover:bg-blue-700 text-white p-3 rounded-xl font-semibold">
                 {editId ? "Update Product" : "Add Product"}
               </button>
 
