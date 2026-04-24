@@ -6,23 +6,25 @@ import { BASE_URL } from "../api";
 const Purchase = () => {
   const [products, setProducts] = useState([]);
   const [purchases, setPurchases] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   const [form, setForm] = useState({
     productId: "",
-    quantity: "",
+    quantity: 1,
     cost: "",
+    supplier: "",
   });
 
   // FETCH DATA
   const fetchData = async () => {
     try {
-      const productsRes = await axios.get(`${BASE_URL}/products`);
-      const purchasesRes = await axios.get(`${BASE_URL}/purchases`);
+      const productRes = await axios.get(`${BASE_URL}/products`);
+      const purchaseRes = await axios.get(`${BASE_URL}/purchases`);
 
-      setProducts(productsRes.data);
-      setPurchases(purchasesRes.data.reverse());
+      setProducts(productRes.data);
+      setPurchases(purchaseRes.data.reverse());
     } catch (error) {
-      toast.error("Failed to fetch purchase data ❌");
+      toast.error("Failed to fetch data ❌");
     }
   };
 
@@ -69,6 +71,7 @@ const Purchase = () => {
 
       // save purchase
       await axios.post(`${BASE_URL}/purchases`, {
+        customer: form.supplier || "-",
         productName: selectedProduct.name,
         quantity,
         cost,
@@ -80,10 +83,12 @@ const Purchase = () => {
 
       setForm({
         productId: "",
-        quantity: "",
+        quantity: 1,
         cost: "",
+        supplier: "",
       });
 
+      setShowModal(false);
       fetchData();
     } catch (error) {
       toast.error("Error saving purchase ❌");
@@ -121,11 +126,7 @@ const Purchase = () => {
         </div>
 
         <button
-          onClick={() =>
-            document
-              .getElementById("purchaseForm")
-              .scrollIntoView({ behavior: "smooth" })
-          }
+          onClick={() => setShowModal(true)}
           className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold"
         >
           + Add Purchase
@@ -143,73 +144,20 @@ const Purchase = () => {
 
         <div className="bg-white rounded-2xl shadow p-6 text-center">
           <p className="text-sm text-gray-500">Total Purchases</p>
-          <h2 className="text-3xl font-bold">
-            {totalPurchaseCount}
-          </h2>
+          <h2 className="text-3xl font-bold">{totalPurchaseCount}</h2>
         </div>
-      </div>
-
-      {/* PURCHASE FORM */}
-      <div
-        id="purchaseForm"
-        className="bg-white rounded-2xl shadow p-6 mb-6"
-      >
-        <h2 className="text-xl font-bold mb-4">Add Purchase</h2>
-
-        <form
-          onSubmit={handleSubmit}
-          className="grid md:grid-cols-4 gap-4"
-        >
-          <select
-            name="productId"
-            value={form.productId}
-            onChange={handleChange}
-            className="border p-3 rounded-lg"
-          >
-            <option value="">Select Product</option>
-
-            {products.map((product) => (
-              <option key={product.id} value={product.id}>
-                {product.name}
-              </option>
-            ))}
-          </select>
-
-          <input
-            type="number"
-            name="quantity"
-            placeholder="Qty"
-            value={form.quantity}
-            onChange={handleChange}
-            className="border p-3 rounded-lg"
-          />
-
-          <input
-            type="number"
-            name="cost"
-            placeholder="Cost"
-            value={form.cost}
-            onChange={handleChange}
-            className="border p-3 rounded-lg"
-          />
-
-          <button className="bg-blue-600 text-white rounded-lg font-semibold">
-            Add Purchase
-          </button>
-        </form>
       </div>
 
       {/* PURCHASE HISTORY */}
       <div className="bg-white rounded-2xl shadow p-6">
-        <h2 className="text-xl font-bold mb-4">
-          Purchase History
-        </h2>
+        <h2 className="text-xl font-bold mb-4">Purchase History</h2>
 
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left border-b">
                 <th className="py-3">#</th>
+                <th>Customer</th>
                 <th>Product</th>
                 <th>Qty</th>
                 <th>Cost</th>
@@ -223,19 +171,18 @@ const Purchase = () => {
               {purchases.map((item, index) => (
                 <tr key={item.id} className="border-b">
                   <td className="py-4">{index + 1}</td>
+                  <td>{item.customer || "-"}</td>
                   <td>{item.productName || "-"}</td>
                   <td>{item.quantity}</td>
                   <td>₹{item.cost}</td>
                   <td className="text-blue-600 font-semibold">
                     ₹{item.total}
                   </td>
-                  <td>
-                    {new Date(item.date).toLocaleString()}
-                  </td>
+                  <td>{new Date(item.date).toLocaleString()}</td>
                   <td>
                     <button
                       onClick={() => handleDelete(item.id)}
-                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg"
                     >
                       Delete
                     </button>
@@ -246,6 +193,99 @@ const Purchase = () => {
           </table>
         </div>
       </div>
+
+      {/* MODAL */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+          <div className="bg-white rounded-2xl w-[360px] shadow-2xl overflow-hidden">
+            {/* TOP BLUE HEADER */}
+            <div className="bg-blue-600 text-white p-5">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-xs opacity-80">New stock entry</p>
+                  <h2 className="text-2xl font-bold">New Purchase</h2>
+                </div>
+
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="text-xl"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+
+            {/* FORM */}
+            <form onSubmit={handleSubmit} className="p-5 space-y-4">
+              <div>
+                <label className="text-sm text-gray-500">Product</label>
+                <select
+                  name="productId"
+                  value={form.productId}
+                  onChange={handleChange}
+                  className="border p-3 rounded-lg w-full"
+                >
+                  <option value="">Select Product</option>
+                  {products.map((product) => (
+                    <option key={product.id} value={product.id}>
+                      {product.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="text-sm text-gray-500">Quantity</label>
+                <input
+                  type="number"
+                  name="quantity"
+                  value={form.quantity}
+                  onChange={handleChange}
+                  className="border p-3 rounded-lg w-full"
+                />
+              </div>
+
+              <div>
+                <label className="text-sm text-gray-500">Cost Price</label>
+                <input
+                  type="number"
+                  name="cost"
+                  placeholder="Cost Price"
+                  value={form.cost}
+                  onChange={handleChange}
+                  className="border p-3 rounded-lg w-full"
+                />
+              </div>
+
+              <div>
+                <label className="text-sm text-gray-500">
+                  Supplier Name
+                </label>
+                <input
+                  type="text"
+                  name="supplier"
+                  placeholder="Supplier name (optional)"
+                  value={form.supplier}
+                  onChange={handleChange}
+                  className="border p-3 rounded-lg w-full"
+                />
+              </div>
+
+              <button className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold">
+                Add Stock
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="w-full bg-gray-100 py-3 rounded-xl"
+              >
+                Cancel
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
