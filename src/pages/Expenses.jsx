@@ -1,197 +1,24 @@
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import toast from "react-hot-toast";
-
-// const Expenses = () => {
-//   const [form, setForm] = useState({
-//     title: "",
-//     amount: "",
-//   });
-
-//   const [expenses, setExpenses] = useState([]);
-//   const [tab, setTab] = useState("entry");
-
-//   // 🔥 FETCH
-//   const fetchExpenses = async () => {
-//     const res = await axios.get("https://billing-system-zykh.onrender.com/expenses");
-//     setExpenses(res.data);
-//   };
-
-//   useEffect(() => {
-//     fetchExpenses();
-//   }, []);
-
-//   // ➕ ADD
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     if (!form.title || !form.amount) {
-//       toast.error("Fill all fields ❌");
-//       return;
-//     }
-
-//     await axios.post("https://billing-system-zykh.onrender.com/expenses", {
-//       ...form,
-//       amount: Number(form.amount),
-//       date: new Date().toISOString(),
-//     });
-
-//     toast.success("Expense added 💸");
-
-//     setForm({ title: "", amount: "" });
-//     fetchExpenses();
-//   };
-
-//   // 📊 CALCULATIONS
-//   const total = expenses.reduce((sum, e) => sum + e.amount, 0);
-
-//   return (
-//     <div className="p-6 bg-gradient-to-br from-blue-50 to-white min-h-screen">
-
-//       <h1 className="text-3xl font-bold mb-6">Expenses 💸</h1>
-
-//       {/* TABS */}
-//       <div className="flex gap-3 mb-6">
-//         <button
-//           onClick={() => setTab("entry")}
-//           className={`px-4 py-2 rounded ${
-//             tab === "entry" ? "bg-red-500 text-white" : "bg-gray-200"
-//           }`}
-//         >
-//           Add Expense
-//         </button>
-
-//         <button
-//           onClick={() => setTab("history")}
-//           className={`px-4 py-2 rounded ${
-//             tab === "history" ? "bg-red-500 text-white" : "bg-gray-200"
-//           }`}
-//         >
-//           History
-//         </button>
-//       </div>
-
-//       {/* ENTRY */}
-//       {tab === "entry" && (
-//         <div className="grid md:grid-cols-2 gap-6">
-
-//           {/* FORM */}
-//           <div className="bg-white p-5 rounded-xl shadow">
-
-//             <h2 className="font-semibold mb-3">Add Expense</h2>
-
-//             <form onSubmit={handleSubmit} className="space-y-3">
-
-//               <input
-//                 placeholder="Expense title"
-//                 value={form.title}
-//                 onChange={(e) => setForm({ ...form, title: e.target.value })}
-//                 className="border p-2 w-full rounded"
-//               />
-
-//               <input
-//                 placeholder="Amount"
-//                 value={form.amount}
-//                 onChange={(e) => setForm({ ...form, amount: e.target.value })}
-//                 className="border p-2 w-full rounded"
-//               />
-
-//               <button className="bg-red-500 text-white w-full p-2 rounded">
-//                 Add Expense
-//               </button>
-
-//             </form>
-//           </div>
-
-//           {/* RECENT */}
-//           <div className="bg-white p-5 rounded-xl shadow">
-
-//             <h2 className="font-semibold mb-3">Recent Expenses</h2>
-
-//             {expenses.slice(-5).reverse().map((e) => (
-//               <div key={e.id} className="flex justify-between border-b py-2 text-sm">
-//                 <p>{e.title}</p>
-//                 <p>₹{e.amount}</p>
-//               </div>
-//             ))}
-
-//           </div>
-
-//         </div>
-//       )}
-
-//       {/* HISTORY */}
-//       {tab === "history" && (
-//         <div className="bg-white p-5 rounded-xl shadow">
-
-//           {/* CARDS */}
-//           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-
-//             <div className="bg-gray-100 p-3 rounded text-center">
-//               <p>Total Expense</p>
-//               <h2 className="font-bold">₹{total}</h2>
-//             </div>
-
-//             <div className="bg-gray-100 p-3 rounded text-center">
-//               <p>Count</p>
-//               <h2 className="font-bold">{expenses.length}</h2>
-//             </div>
-
-//           </div>
-
-//           {/* TABLE */}
-//           <table className="w-full text-sm">
-//             <thead>
-//               <tr className="border-b text-left">
-//                 <th>#</th>
-//                 <th>Title</th>
-//                 <th>Amount</th>
-//                 <th>Date</th>
-//               </tr>
-//             </thead>
-
-//             <tbody>
-//               {expenses.map((e, i) => (
-//                 <tr key={e.id} className="border-b">
-//                   <td>{i + 1}</td>
-//                   <td>{e.title}</td>
-//                   <td>₹{e.amount}</td>
-//                   <td>{new Date(e.date).toLocaleString()}</td>
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-
-//         </div>
-//       )}
-
-//     </div>
-//   );
-// };
-
-// export default Expenses;
-
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { BASE_URL } from "../api"; // ✅ IMPORTANT
+import { BASE_URL } from "../api";
 
 const Expenses = () => {
+  const [expenses, setExpenses] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [editId, setEditId] = useState(null);
+
   const [form, setForm] = useState({
     title: "",
     amount: "",
   });
 
-  const [expenses, setExpenses] = useState([]);
-  const [tab, setTab] = useState("entry");
-
-  // 🔥 FETCH
+  // FETCH EXPENSES
   const fetchExpenses = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/expenses`);
-      setExpenses(res.data);
-    } catch {
+      setExpenses(res.data.reverse());
+    } catch (error) {
       toast.error("Failed to load expenses ❌");
     }
   };
@@ -200,7 +27,15 @@ const Expenses = () => {
     fetchExpenses();
   }, []);
 
-  // ➕ ADD
+  // HANDLE INPUT
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // ADD / UPDATE
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -210,156 +45,218 @@ const Expenses = () => {
     }
 
     try {
-      await axios.post(`${BASE_URL}/expenses`, {
+      const payload = {
         ...form,
         amount: Number(form.amount),
         date: new Date().toISOString(),
+      };
+
+      if (editId) {
+        await axios.put(`${BASE_URL}/expenses/${editId}`, payload);
+        toast.success("Expense Updated");
+      } else {
+        await axios.post(`${BASE_URL}/expenses`, payload);
+        toast.success("Expense Added 💸");
+      }
+
+      setForm({
+        title: "",
+        amount: "",
       });
 
-      toast.success("Expense added 💸");
-
-      setForm({ title: "", amount: "" });
+      setEditId(null);
+      setShowModal(false);
       fetchExpenses();
-
-    } catch {
-      toast.error("Error adding expense ❌");
+    } catch (error) {
+      toast.error("Operation Failed ❌");
     }
   };
 
-  // 📊 CALCULATIONS
-  const total = expenses.reduce((sum, e) => sum + (e.amount || 0), 0);
+  // DELETE
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${BASE_URL}/expenses/${id}`);
+      toast.success("Deleted Successfully");
+      fetchExpenses();
+    } catch (error) {
+      toast.error("Delete Failed ❌");
+    }
+  };
+
+  // EDIT
+  const handleEdit = (expense) => {
+    setForm({
+      title: expense.title,
+      amount: expense.amount,
+    });
+
+    setEditId(expense.id);
+    setShowModal(true);
+  };
+
+  // TOTAL
+  const totalExpense = expenses.reduce(
+    (sum, item) => sum + Number(item.amount || 0),
+    0
+  );
 
   return (
-    <div className="p-6 bg-gradient-to-br from-blue-50 to-white min-h-screen">
-
-      <h1 className="text-3xl font-bold mb-6">Expenses 💸</h1>
-
-      {/* TABS */}
-      <div className="flex gap-3 mb-6">
-        <button
-          onClick={() => setTab("entry")}
-          className={`px-4 py-2 rounded ${
-            tab === "entry"
-              ? "bg-red-500 text-white"
-              : "bg-gray-200"
-          }`}
-        >
-          Add Expense
-        </button>
+    <div className="p-6 bg-[#f5f6fa] min-h-screen">
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-4xl font-bold">Expenses</h1>
+          <p className="text-gray-500">
+            {expenses.length} expenses recorded
+          </p>
+        </div>
 
         <button
-          onClick={() => setTab("history")}
-          className={`px-4 py-2 rounded ${
-            tab === "history"
-              ? "bg-red-500 text-white"
-              : "bg-gray-200"
-          }`}
+          onClick={() => {
+            setShowModal(true);
+            setEditId(null);
+            setForm({
+              title: "",
+              amount: "",
+            });
+          }}
+          className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold shadow"
         >
-          History
+          + Add Expense
         </button>
       </div>
 
-      {/* ENTRY */}
-      {tab === "entry" && (
-        <div className="grid md:grid-cols-2 gap-6">
-
-          {/* FORM */}
-          <div className="bg-white p-5 rounded-xl shadow">
-
-            <h2 className="font-semibold mb-3">Add Expense</h2>
-
-            <form onSubmit={handleSubmit} className="space-y-3">
-
-              <input
-                placeholder="Expense title"
-                value={form.title}
-                onChange={(e) =>
-                  setForm({ ...form, title: e.target.value })
-                }
-                className="border p-2 w-full rounded"
-              />
-
-              <input
-                placeholder="Amount"
-                value={form.amount}
-                onChange={(e) =>
-                  setForm({ ...form, amount: e.target.value })
-                }
-                className="border p-2 w-full rounded"
-              />
-
-              <button className="bg-red-500 text-white w-full p-2 rounded">
-                Add Expense
-              </button>
-
-            </form>
-          </div>
-
-          {/* RECENT */}
-          <div className="bg-white p-5 rounded-xl shadow">
-
-            <h2 className="font-semibold mb-3">Recent Expenses</h2>
-
-            {expenses.slice(-5).reverse().map((e) => (
-              <div
-                key={e.id}
-                className="flex justify-between border-b py-2 text-sm"
-              >
-                <p>{e.title}</p>
-                <p>₹{e.amount}</p>
-              </div>
-            ))}
-
-          </div>
-
-        </div>
-      )}
+      {/* TOTAL CARD */}
+      <div className="bg-white rounded-2xl shadow p-6 text-center mb-6">
+        <p className="text-sm text-gray-500">Total Expense</p>
+        <h2 className="text-3xl font-bold text-red-600">
+          ₹{totalExpense}
+        </h2>
+      </div>
 
       {/* HISTORY */}
-      {tab === "history" && (
-        <div className="bg-white p-5 rounded-xl shadow">
+      <div className="bg-white rounded-2xl shadow p-6">
+        <h2 className="text-xl font-bold mb-4">
+          Expense History
+        </h2>
 
-          {/* CARDS */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-
-            <div className="bg-gray-100 p-3 rounded text-center">
-              <p>Total Expense</p>
-              <h2 className="font-bold">₹{total}</h2>
-            </div>
-
-            <div className="bg-gray-100 p-3 rounded text-center">
-              <p>Count</p>
-              <h2 className="font-bold">{expenses.length}</h2>
-            </div>
-
-          </div>
-
-          {/* TABLE */}
+        <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b text-left">
-                <th>#</th>
+                <th className="py-3">#</th>
                 <th>Title</th>
                 <th>Amount</th>
                 <th>Date</th>
+                <th>Action</th>
               </tr>
             </thead>
 
             <tbody>
-              {expenses.map((e, i) => (
-                <tr key={e.id} className="border-b">
-                  <td>{i + 1}</td>
-                  <td>{e.title}</td>
-                  <td>₹{e.amount}</td>
-                  <td>{new Date(e.date).toLocaleString()}</td>
+              {expenses.map((item, index) => (
+                <tr key={item.id} className="border-b">
+                  <td className="py-4">{index + 1}</td>
+                  <td>{item.title}</td>
+                  <td className="text-red-500 font-semibold">
+                    ₹{item.amount}
+                  </td>
+                  <td>
+                    {new Date(item.date).toLocaleString()}
+                  </td>
+
+                  <td className="flex gap-2 py-3">
+                    <button
+                      onClick={() => handleEdit(item)}
+                      className="bg-yellow-400 px-4 py-2 rounded-lg"
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg"
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+      </div>
 
+      {/* MODAL */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+          <div className="bg-white rounded-2xl w-[360px] shadow-2xl overflow-hidden">
+            
+            {/* RED HEADER */}
+            <div className="bg-red-600 text-white p-5">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-xs opacity-80">
+                    New expense entry
+                  </p>
+                  <h2 className="text-2xl font-bold">
+                    {editId ? "Edit Expense" : "Add Expense"}
+                  </h2>
+                </div>
+
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="text-xl"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+
+            {/* FORM */}
+            <form onSubmit={handleSubmit} className="p-5 space-y-4">
+              <div>
+                <label className="text-sm text-gray-500">
+                  Title
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  placeholder="Expense title"
+                  value={form.title}
+                  onChange={handleChange}
+                  className="border p-3 rounded-lg w-full"
+                />
+              </div>
+
+              <div>
+                <label className="text-sm text-gray-500">
+                  Amount
+                </label>
+                <input
+                  type="number"
+                  name="amount"
+                  placeholder="Amount"
+                  value={form.amount}
+                  onChange={handleChange}
+                  className="border p-3 rounded-lg w-full"
+                />
+              </div>
+
+              <button className="w-full bg-red-600 text-white py-3 rounded-xl font-semibold">
+                {editId ? "Update Expense" : "Add Expense"}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="w-full bg-gray-100 py-3 rounded-xl"
+              >
+                Cancel
+              </button>
+            </form>
+          </div>
         </div>
       )}
-
     </div>
   );
 };
