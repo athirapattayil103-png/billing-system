@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../api";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const Suppliers = () => {
   const [purchases, setPurchases] = useState([]);
@@ -13,11 +15,8 @@ const Suppliers = () => {
   // FETCH PURCHASES
   const fetchPurchases = async () => {
     try {
-      // ✅ purchases route
       const res = await axios.get(`${BASE_URL}/purchases`);
-
       setPurchases(res.data.reverse());
-
     } catch (error) {
       console.log(error);
     }
@@ -27,7 +26,6 @@ const Suppliers = () => {
   const supplierMap = {};
 
   purchases.forEach((item) => {
-
     const name = item.supplier || "Unknown";
 
     if (!supplierMap[name]) {
@@ -41,7 +39,6 @@ const Suppliers = () => {
 
     supplierMap[name].total += Number(item.total || 0);
 
-    // if paid field not exists use total
     supplierMap[name].paid += Number(
       item.paid || item.total || 0
     );
@@ -69,6 +66,29 @@ const Suppliers = () => {
     0
   );
 
+  // PDF DOWNLOAD
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+
+    doc.setFontSize(20);
+    doc.text("Suppliers Report", 14, 20);
+
+    autoTable(doc, {
+      startY: 30,
+
+      head: [["Name", "Total", "Paid", "Balance"]],
+
+      body: suppliers.map((s) => [
+        s.name,
+        `₹${s.total}`,
+        `₹${s.paid}`,
+        `₹${s.balance}`,
+      ]),
+    });
+
+    doc.save("suppliers-report.pdf");
+  };
+
   return (
     <div className="p-6 bg-[#f5f6fa] min-h-screen">
 
@@ -79,7 +99,10 @@ const Suppliers = () => {
           Suppliers
         </h1>
 
-        <button className="bg-green-600 text-white px-5 py-3 rounded-xl">
+        <button
+          onClick={downloadPDF}
+          className="bg-green-600 text-white px-5 py-3 rounded-xl"
+        >
           Download PDF
         </button>
 
@@ -89,7 +112,6 @@ const Suppliers = () => {
       <div className="grid md:grid-cols-3 gap-4 mb-6">
 
         <div className="bg-white p-6 rounded-2xl shadow">
-
           <p className="text-gray-500">
             Suppliers
           </p>
@@ -97,11 +119,9 @@ const Suppliers = () => {
           <h2 className="text-3xl font-bold">
             {suppliers.length}
           </h2>
-
         </div>
 
         <div className="bg-white p-6 rounded-2xl shadow">
-
           <p className="text-gray-500">
             Total Purchase
           </p>
@@ -109,11 +129,9 @@ const Suppliers = () => {
           <h2 className="text-3xl font-bold text-green-600">
             ₹{totalPurchase}
           </h2>
-
         </div>
 
         <div className="bg-white p-6 rounded-2xl shadow">
-
           <p className="text-gray-500">
             Pending
           </p>
@@ -121,7 +139,6 @@ const Suppliers = () => {
           <h2 className="text-3xl font-bold text-red-500">
             ₹{totalPending}
           </h2>
-
         </div>
 
       </div>
@@ -132,7 +149,6 @@ const Suppliers = () => {
         <table className="w-full">
 
           <thead className="bg-[#0f172a] text-white">
-
             <tr>
               <th className="text-left p-4">
                 Name
@@ -150,7 +166,6 @@ const Suppliers = () => {
                 Balance
               </th>
             </tr>
-
           </thead>
 
           <tbody>
