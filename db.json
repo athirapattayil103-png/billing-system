@@ -19,7 +19,7 @@
       "id": "d6d3",
       "name": "egg",
       "price": 10,
-      "stock": 3,
+      "stock": 13,
       "minStock": 15,
       "category": "grosery"
     },
@@ -27,7 +27,7 @@
       "id": "cd9f",
       "name": "book",
       "price": 50,
-      "stock": 250,
+      "stock": 300,
       "minStock": 200,
       "category": "stationary"
     },
@@ -83,7 +83,7 @@
       "id": "c676",
       "name": "box",
       "price": 10,
-      "stock": 206,
+      "stock": 217,
       "minStock": 20,
       "category": "stationary"
     }
@@ -109,30 +109,33 @@
     },
     {
       "id": "dd2b",
-      "customer": "anu",
+      "supplier": "krishna",
+      "productId": "c676",
       "productName": "box",
       "quantity": 11,
       "cost": 110,
       "total": 1210,
-      "date": "2026-04-24T10:32:42.830Z"
+      "date": "2026-05-07T10:40:47.217Z"
     },
     {
       "id": "022a",
-      "customer": "ram",
+      "supplier": "ramu",
+      "productId": "d6d3",
       "productName": "egg",
       "quantity": 10,
       "cost": 12,
       "total": 120,
-      "date": "2026-04-24T10:33:05.346Z"
+      "date": "2026-05-07T10:40:14.458Z"
     },
     {
       "id": "2618",
-      "customer": "manu",
+      "supplier": "manu",
+      "productId": "cd9f",
       "productName": "book",
       "quantity": 50,
       "cost": 1000,
       "total": 50000,
-      "date": "2026-04-24T10:33:37.031Z"
+      "date": "2026-05-07T10:28:23.017Z"
     }
   ],
   "sales": [

@@ -3,22 +3,31 @@ import axios from "axios";
 import { BASE_URL } from "../api";
 
 const Suppliers = () => {
-  const [purchase, setPurchase] = useState([]);
+  const [purchases, setPurchases] = useState([]);
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    fetchPurchase();
+    fetchPurchases();
   }, []);
 
-  const fetchPurchase = async () => {
-    const res = await axios.get(`${BASE_URL}/purchase`);
-    setPurchase(res.data);
+  // FETCH PURCHASES
+  const fetchPurchases = async () => {
+    try {
+      // ✅ purchases route
+      const res = await axios.get(`${BASE_URL}/purchases`);
+
+      setPurchases(res.data.reverse());
+
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // UNIQUE SUPPLIERS
   const supplierMap = {};
 
-  purchase.forEach((item) => {
+  purchases.forEach((item) => {
+
     const name = item.supplier || "Unknown";
 
     if (!supplierMap[name]) {
@@ -31,18 +40,25 @@ const Suppliers = () => {
     }
 
     supplierMap[name].total += Number(item.total || 0);
-    supplierMap[name].paid += Number(item.paid || item.total || 0);
+
+    // if paid field not exists use total
+    supplierMap[name].paid += Number(
+      item.paid || item.total || 0
+    );
   });
 
+  // FINAL ARRAY
   const suppliers = Object.values(supplierMap).map((s) => ({
     ...s,
     balance: s.total - s.paid,
   }));
 
+  // SEE MORE
   const visibleSuppliers = showAll
     ? suppliers
     : suppliers.slice(0, 5);
 
+  // TOTALS
   const totalPurchase = suppliers.reduce(
     (sum, s) => sum + s.total,
     0
@@ -58,6 +74,7 @@ const Suppliers = () => {
 
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
+
         <h1 className="text-4xl font-bold">
           Suppliers
         </h1>
@@ -65,33 +82,46 @@ const Suppliers = () => {
         <button className="bg-green-600 text-white px-5 py-3 rounded-xl">
           Download PDF
         </button>
+
       </div>
 
-      {/* TOP */}
+      {/* TOP CARDS */}
       <div className="grid md:grid-cols-3 gap-4 mb-6">
 
         <div className="bg-white p-6 rounded-2xl shadow">
-          <p className="text-gray-500">Suppliers</p>
+
+          <p className="text-gray-500">
+            Suppliers
+          </p>
 
           <h2 className="text-3xl font-bold">
             {suppliers.length}
           </h2>
+
         </div>
 
         <div className="bg-white p-6 rounded-2xl shadow">
-          <p className="text-gray-500">Total Purchase</p>
+
+          <p className="text-gray-500">
+            Total Purchase
+          </p>
 
           <h2 className="text-3xl font-bold text-green-600">
             ₹{totalPurchase}
           </h2>
+
         </div>
 
         <div className="bg-white p-6 rounded-2xl shadow">
-          <p className="text-gray-500">Pending</p>
+
+          <p className="text-gray-500">
+            Pending
+          </p>
 
           <h2 className="text-3xl font-bold text-red-500">
             ₹{totalPending}
           </h2>
+
         </div>
 
       </div>
@@ -102,23 +132,43 @@ const Suppliers = () => {
         <table className="w-full">
 
           <thead className="bg-[#0f172a] text-white">
+
             <tr>
-              <th className="text-left p-4">Name</th>
-              <th className="text-left">Total</th>
-              <th className="text-left">Paid</th>
-              <th className="text-left">Balance</th>
+              <th className="text-left p-4">
+                Name
+              </th>
+
+              <th className="text-left">
+                Total
+              </th>
+
+              <th className="text-left">
+                Paid
+              </th>
+
+              <th className="text-left">
+                Balance
+              </th>
             </tr>
+
           </thead>
 
           <tbody>
+
             {visibleSuppliers.map((s, index) => (
+
               <tr
                 key={index}
                 className="border-b"
               >
-                <td className="p-4">{s.name}</td>
 
-                <td>₹{s.total}</td>
+                <td className="p-4 font-medium">
+                  {s.name}
+                </td>
+
+                <td>
+                  ₹{s.total}
+                </td>
 
                 <td className="text-green-600">
                   ₹{s.paid}
@@ -127,22 +177,28 @@ const Suppliers = () => {
                 <td className="text-red-500">
                   ₹{s.balance}
                 </td>
+
               </tr>
             ))}
+
           </tbody>
 
         </table>
+
       </div>
 
       {/* SEE MORE */}
       {suppliers.length > 5 && (
+
         <div className="flex justify-center mt-5">
+
           <button
             onClick={() => setShowAll(!showAll)}
             className="bg-gray-200 px-5 py-2 rounded-lg"
           >
             {showAll ? "Show Less" : "See More"}
           </button>
+
         </div>
       )}
     </div>
