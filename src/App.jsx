@@ -4,14 +4,15 @@ import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
 import Sales from "./pages/Sales";
 import Purchase from "./pages/Purchase";
-import Customers from "./pages/Customers";
-import Suppliers from "./pages/Suppliers";
+
 import Expenses from "./pages/Expenses";
 // import SalesReturn from "./pages/SalesReturn";
 import MainLayout from "./layout/MainLayout";
 // import PurchaseReturn from "./pages/PurchaseReturn";
 import Reports from "./pages/Reports";
 import Returns from "./pages/Returns";
+import Customers from "./pages/Customers ";
+import Suppliers from "./pages/Suppliers";
 
 function App() {
   return (
