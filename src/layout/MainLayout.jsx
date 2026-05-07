@@ -1,3 +1,5 @@
+/* MainLayout.jsx */
+
 import { Outlet, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 
@@ -10,15 +12,21 @@ const MainLayout = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex h-screen overflow-hidden">
 
-      <Sidebar />
+      {/* Fixed Sidebar */}
+      <div className="w-52 h-screen fixed left-0 top-0">
+        <Sidebar />
+      </div>
 
-      <div className="flex-1 bg-gray-100 min-h-screen flex flex-col">
+      {/* Main Content */}
+      <div className="flex-1 ml-52 h-screen overflow-hidden bg-gray-100 flex flex-col">
 
-        {/* 🔴 TOP NAVBAR */}
+        {/* TOP NAVBAR */}
         <div className="flex justify-between items-center bg-white px-6 py-3 shadow">
-          <h1 className="font-semibold text-lg">Billing System</h1>
+          <h1 className="font-semibold text-lg">
+            Billing System
+          </h1>
 
           <button
             onClick={handleLogout}
@@ -29,7 +37,7 @@ const MainLayout = () => {
         </div>
 
         {/* PAGE CONTENT */}
-        <div className="p-4 flex-1">
+        <div className="p-4 flex-1 overflow-y-auto">
           <Outlet />
         </div>
 

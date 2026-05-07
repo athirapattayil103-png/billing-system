@@ -19,8 +19,8 @@
       "id": "d6d3",
       "name": "egg",
       "price": 10,
-      "stock": 20,
-      "minStock": 19,
+      "stock": 3,
+      "minStock": 15,
       "category": "grosery"
     },
     {
@@ -43,7 +43,7 @@
       "id": "6f09",
       "name": "pencil",
       "price": 8,
-      "stock": 150,
+      "stock": 110,
       "minStock": 100,
       "category": "stationary"
     },
@@ -51,7 +51,7 @@
       "id": "52b9",
       "name": "A4",
       "price": 4,
-      "stock": 10,
+      "stock": 2,
       "minStock": 5,
       "category": "stationary"
     },
@@ -59,7 +59,7 @@
       "id": "e768",
       "name": "table",
       "price": 1200,
-      "stock": 20,
+      "stock": 7,
       "minStock": 8,
       "category": "furniture"
     },
@@ -67,7 +67,7 @@
       "id": "37ee",
       "name": "water bottel",
       "price": 170,
-      "stock": 100,
+      "stock": 105,
       "minStock": 40,
       "category": "stationary"
     },
@@ -75,7 +75,7 @@
       "id": "3d7d",
       "name": "color pen",
       "price": 200,
-      "stock": 180,
+      "stock": 170,
       "minStock": 70,
       "category": "stationary"
     },
@@ -83,7 +83,7 @@
       "id": "c676",
       "name": "box",
       "price": 10,
-      "stock": 211,
+      "stock": 206,
       "minStock": 20,
       "category": "stationary"
     }
@@ -137,33 +137,49 @@
   ],
   "sales": [
     {
-      "id": "0d99",
-      "items": [
-        {
-          "id": "1",
-          "name": "Rice",
-          "price": 50,
-          "qty": 3,
-          "total": 150
-        }
-      ],
-      "total": 150,
-      "date": "2026-04-10T16:43:44.308Z"
+      "id": "e032",
+      "customer": "hari",
+      "productName": "color pen",
+      "price": 200,
+      "quantity": 10,
+      "total": 2000,
+      "date": "2026-04-27T06:42:52.385Z"
     },
     {
-      "id": "d72e",
-      "items": [
-        {
-          "id": "85c1",
-          "name": "fan",
-          "price": 10000,
-          "qty": 2,
-          "total": 20000
-        }
-      ],
-      "total": 20000,
-      "date": "2026-04-17T16:08:25.778Z",
-      "returned": true
+      "id": "cf9c",
+      "customer": "anu",
+      "productName": "box",
+      "price": 10,
+      "quantity": 5,
+      "total": 50,
+      "date": "2026-04-27T06:44:58.446Z"
+    },
+    {
+      "id": "a2b6",
+      "customer": "husna",
+      "productName": "table",
+      "price": 1200,
+      "quantity": 3,
+      "total": 3600,
+      "date": "2026-04-27T06:45:18.837Z"
+    },
+    {
+      "id": "725b",
+      "customer": "safa",
+      "productName": "pencil",
+      "price": 8,
+      "quantity": 40,
+      "total": 320,
+      "date": "2026-04-27T06:45:33.677Z"
+    },
+    {
+      "id": "f2f6",
+      "customer": "jiya",
+      "productName": "egg",
+      "price": 10,
+      "quantity": 17,
+      "total": 170,
+      "date": "2026-04-27T06:49:28.487Z"
     }
   ],
   "expenses": [
@@ -172,6 +188,12 @@
       "title": "just",
       "amount": 10000,
       "date": "2026-04-17T18:04:00.960Z"
+    },
+    {
+      "id": "fe75",
+      "title": "current bill",
+      "amount": 1200,
+      "date": "2026-04-24T10:54:30.768Z"
     }
   ],
   "notifications": [
@@ -219,7 +241,7 @@
   "returns": [
     {
       "id": "2c8c",
-      "saleId": "d72e",
+      "saleId": null,
       "amount": 20000,
       "type": "sale",
       "date": "2026-04-17T16:54:02.383Z"
@@ -241,6 +263,22 @@
       "qty": 10,
       "amount": 100,
       "date": "2026-04-17T18:04:47.446Z"
+    },
+    {
+      "id": "1344",
+      "productName": "water bottel",
+      "qty": 5,
+      "total": 850,
+      "type": "sale",
+      "date": "2026-04-24T10:53:52.639Z"
+    },
+    {
+      "id": "8a94",
+      "productName": "table",
+      "qty": 10,
+      "total": 12000,
+      "type": "purchase",
+      "date": "2026-04-24T10:54:06.687Z"
     }
   ]
 }

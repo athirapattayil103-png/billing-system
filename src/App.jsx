@@ -4,6 +4,8 @@ import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
 import Sales from "./pages/Sales";
 import Purchase from "./pages/Purchase";
+import Customers from "./pages/Customers";
+import Suppliers from "./pages/Suppliers";
 import Expenses from "./pages/Expenses";
 // import SalesReturn from "./pages/SalesReturn";
 import MainLayout from "./layout/MainLayout";
@@ -22,6 +24,8 @@ function App() {
   <Route path="products" element={<Products />} />
   <Route path="purchase" element={<Purchase />} />
   <Route path="sales" element={<Sales />} />
+  <Route path="customers" element={<Customers />} />
+<Route path="suppliers" element={<Suppliers />} />
   <Route path="expenses" element={<Expenses />} />
   <Route path="returns" element={<Returns />} />
   {/* <Route path="sales-return" element={<SalesReturn />} /> */}

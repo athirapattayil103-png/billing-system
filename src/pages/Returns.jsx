@@ -341,6 +341,7 @@ const Returns = () => {
   const [returns, setReturns] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  const [editId, setEditId] = useState(null);
 
   const [form, setForm] = useState({
     type: "sale",
@@ -373,7 +374,23 @@ const Returns = () => {
     });
   };
 
-  // PROCESS RETURN
+  // EDIT
+  const handleEdit = (item) => {
+    const matchedProduct = products.find(
+      (p) => p.name === item.productName
+    );
+
+    setForm({
+      type: item.type || "sale",
+      productId: matchedProduct ? matchedProduct.id : "",
+      qty: item.qty || 1,
+    });
+
+    setEditId(item.id);
+    setShowModal(true);
+  };
+
+  // ADD / UPDATE RETURN
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -395,27 +412,45 @@ const Returns = () => {
     const total = Number(product.price) * qty;
 
     try {
-      // STOCK UPDATE
-      let updatedStock =
-        form.type === "sale"
-          ? Number(product.stock) + qty
-          : Number(product.stock) - qty;
+      // only for new return → stock update
+      if (!editId) {
+        let updatedStock =
+          form.type === "sale"
+            ? Number(product.stock) + qty
+            : Number(product.stock) - qty;
 
-      await axios.put(`${BASE_URL}/products/${product.id}`, {
-        ...product,
-        stock: updatedStock,
-      });
+        await axios.put(`${BASE_URL}/products/${product.id}`, {
+          ...product,
+          stock: updatedStock,
+        });
+      }
 
-      // SAVE RETURN
-      await axios.post(`${BASE_URL}/returns`, {
-        productName: product.name,
-        qty,
-        total,
-        type: form.type,
-        date: new Date().toISOString(),
-      });
+      // UPDATE RETURN
+      if (editId) {
+        await axios.put(`${BASE_URL}/returns/${editId}`, {
+          id: editId,
+          productName: product.name,
+          qty,
+          total,
+          type: form.type,
+          date: new Date().toISOString(),
+        });
 
-      toast.success("Return Processed");
+        toast.success("Return Updated ✅");
+      }
+
+      // ADD RETURN
+      else {
+        await axios.post(`${BASE_URL}/returns`, {
+          productName: product.name,
+          qty,
+          total,
+          type: form.type,
+          date: new Date().toISOString(),
+        });
+
+        toast.success("Return Processed ✅");
+      }
 
       setForm({
         type: "sale",
@@ -423,6 +458,7 @@ const Returns = () => {
         qty: 1,
       });
 
+      setEditId(null);
       setShowModal(false);
       fetchData();
     } catch (error) {
@@ -455,14 +491,13 @@ const Returns = () => {
     .filter((r) => r.type === "purchase")
     .reduce((sum, item) => sum + Number(item.total || 0), 0);
 
-  // SEE MORE LOGIC
+  // SEE MORE
   const visibleReturns = showAll
     ? returns
     : returns.slice(0, 4);
 
   return (
     <div className="p-6 bg-[#f5f6fa] min-h-screen">
-
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
         <div>
@@ -473,7 +508,15 @@ const Returns = () => {
         </div>
 
         <button
-          onClick={() => setShowModal(true)}
+          onClick={() => {
+            setShowModal(true);
+            setEditId(null);
+            setForm({
+              type: "sale",
+              productId: "",
+              qty: 1,
+            });
+          }}
           className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-semibold shadow"
         >
           + Add Return
@@ -482,7 +525,6 @@ const Returns = () => {
 
       {/* TOP CARDS */}
       <div className="grid grid-cols-4 gap-4 mb-6">
-
         <div className="bg-white rounded-xl shadow p-5 text-center">
           <p className="text-sm text-gray-500">Total</p>
           <h2 className="text-2xl font-bold text-red-500">
@@ -510,7 +552,6 @@ const Returns = () => {
             {returns.length}
           </h2>
         </div>
-
       </div>
 
       {/* TABLE */}
@@ -552,11 +593,19 @@ const Returns = () => {
                 </td>
 
                 <td>₹{item.total}</td>
+
                 <td>
                   {new Date(item.date).toLocaleString()}
                 </td>
 
-                <td>
+                <td className="flex gap-2 py-3">
+                  <button
+                    onClick={() => handleEdit(item)}
+                    className="bg-yellow-400 px-4 py-2 rounded-lg"
+                  >
+                    Edit
+                  </button>
+
                   <button
                     onClick={() => handleDelete(item.id)}
                     className="bg-red-500 text-white px-4 py-2 rounded-lg"
@@ -594,8 +643,9 @@ const Returns = () => {
                   <p className="text-xs opacity-80">
                     New return entry
                   </p>
+
                   <h2 className="text-2xl font-bold">
-                    Process Return
+                    {editId ? "Edit Return" : "Process Return"}
                   </h2>
                 </div>
 
@@ -609,8 +659,10 @@ const Returns = () => {
             </div>
 
             {/* FORM */}
-            <form onSubmit={handleSubmit} className="p-5 space-y-4">
-
+            <form
+              onSubmit={handleSubmit}
+              className="p-5 space-y-4"
+            >
               <div>
                 <label className="text-sm text-gray-500">
                   Return Type
@@ -642,10 +694,15 @@ const Returns = () => {
                   onChange={handleChange}
                   className="border p-3 rounded-lg w-full"
                 >
-                  <option value="">Select Product</option>
+                  <option value="">
+                    Select Product
+                  </option>
 
                   {products.map((p) => (
-                    <option key={p.id} value={p.id}>
+                    <option
+                      key={p.id}
+                      value={p.id}
+                    >
                       {p.name}
                     </option>
                   ))}
@@ -667,7 +724,7 @@ const Returns = () => {
               </div>
 
               <button className="w-full bg-purple-600 text-white py-3 rounded-xl font-semibold">
-                Process Return
+                {editId ? "Update Return" : "Process Return"}
               </button>
 
               <button
@@ -677,7 +734,6 @@ const Returns = () => {
               >
                 Cancel
               </button>
-
             </form>
           </div>
         </div>
