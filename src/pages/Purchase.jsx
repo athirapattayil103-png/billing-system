@@ -385,17 +385,38 @@ setItems([
                     {item.supplier || "-"}
                   </td>
 
-                  <td>
+                  {/* <td>
                     {item.productName || "-"}
-                  </td>
-
+                  </td> */}
                   <td>
-                    {item.quantity}
-                  </td>
+  {item.items
+    ? item.items.map((i) => i.productName).join(", ")
+    : item.productName || "-"}
+</td>
 
+                  {/* <td>
+                    {item.quantity}
+                  </td> */}
+                  <td>
+  {item.items
+    ? item.items.reduce(
+        (sum, i) => sum + Number(i.quantity),
+        0
+      )
+    : item.quantity}
+</td>
+{/* 
                   <td>
                     ₹{item.cost}
-                  </td>
+                  </td> */}
+                  <td>
+  {item.items
+    ? `₹${item.items.reduce(
+        (sum, i) => sum + Number(i.cost),
+        0
+      )}`
+    : `₹${item.cost}`}
+</td>
 
                   <td className="text-blue-600 font-semibold">
                     ₹{item.total}

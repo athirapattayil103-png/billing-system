@@ -11,7 +11,7 @@
       "id": "d6d3",
       "name": "egg",
       "price": 10,
-      "stock": 13,
+      "stock": 14,
       "minStock": 15,
       "category": "grosery"
     },
@@ -19,7 +19,7 @@
       "id": "cd9f",
       "name": "book",
       "price": 50,
-      "stock": 299,
+      "stock": 317,
       "minStock": 200,
       "category": "stationary"
     },
@@ -27,7 +27,7 @@
       "id": "1b27",
       "name": "pen",
       "price": 10,
-      "stock": 105,
+      "stock": 120,
       "minStock": 100,
       "category": "stationary"
     },
@@ -154,6 +154,38 @@
       "cost": 100,
       "total": 100,
       "date": "2026-05-11T04:09:23.006Z"
+    },
+    {
+      "id": "2837",
+      "supplier": "jibin",
+      "items": [
+        {
+          "productId": "1b27",
+          "productName": "pen",
+          "quantity": 5,
+          "cost": 100,
+          "total": 500
+        }
+      ],
+      "productName": "1 items",
+      "total": 500,
+      "date": "2026-05-11T09:11:20.062Z"
+    },
+    {
+      "id": "0a03",
+      "supplier": "sree",
+      "items": [
+        {
+          "productId": "d6d3",
+          "productName": "egg",
+          "quantity": 1,
+          "cost": 10,
+          "total": 10
+        }
+      ],
+      "productName": "1 items",
+      "total": 10,
+      "date": "2026-05-11T09:12:39.317Z"
     }
   ],
   "sales": [
