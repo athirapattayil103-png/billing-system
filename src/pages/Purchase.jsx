@@ -12,14 +12,28 @@ const Purchase = () => {
   const [purchases, setPurchases] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  // const [editId, setEditId] = useState(null);
+
+  // const [form, setForm] = useState({
+  //   productId: "",
+  //   quantity: 1,
+  //   cost: "",
+  //   supplier: "",
+  // });
+
+
+
   const [editId, setEditId] = useState(null);
 
-  const [form, setForm] = useState({
+const [supplier, setSupplier] = useState("");
+
+const [items, setItems] = useState([
+  {
     productId: "",
     quantity: 1,
     cost: "",
-    supplier: "",
-  });
+  },
+]);
 
   // FETCH DATA
   const fetchData = async () => {
@@ -39,92 +53,200 @@ const Purchase = () => {
   }, []);
 
   // HANDLE INPUT
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // const handleChange = (e) => {
+  //   setForm({
+  //     ...form,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
+
+  const handleItemChange = (index, field, value) => {
+  const updated = [...items];
+  updated[index][field] = value;
+  setItems(updated);
+};
+
+const addItemRow = () => {
+  setItems([
+    ...items,
+    {
+      productId: "",
+      quantity: 1,
+      cost: "",
+    },
+  ]);
+};
+
+const removeItemRow = (index) => {
+  if (items.length === 1) return;
+  setItems(items.filter((_, i) => i !== index));
+};
 
   // EDIT
-  const handleEdit = (item) => {
-    setForm({
-      productId: item.productId || "",
-      quantity: item.quantity || 1,
-      cost: item.cost || "",
-      supplier: item.supplier || "",
-    });
 
-    setEditId(item.id);
-    setShowModal(true);
-  };
+  const handleEdit = (item) => {
+  setSupplier(item.supplier || "-");
+
+  if (item.items && item.items.length > 0) {
+    setItems(item.items);
+  } else {
+    setItems([
+      {
+        productId: item.productId || "",
+        quantity: item.quantity || 1,
+        cost: item.cost || "",
+      },
+    ]);
+  }
+
+  setEditId(item.id);
+  setShowModal(true);
+};
+  // const handleEdit = (item) => {
+  //   setForm({
+  //     productId: item.productId || "",
+  //     quantity: item.quantity || 1,
+  //     cost: item.cost || "",
+  //     supplier: item.supplier || "",
+  //   });
+
+  //   setEditId(item.id);
+  //   setShowModal(true);
+  // };
 
   // ADD / UPDATE PURCHASE
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!form.productId || !form.quantity || !form.cost) {
-      toast.error("Fill all fields ❌");
-      return;
-    }
+    // if (!form.productId || !form.quantity || !form.cost) {
+    //   toast.error("Fill all fields ❌");
+    //   return;
+    // }
+    if (!items.length) {
+  toast.error("Add at least one product ❌");
+  return;
+}
+
+for (const item of items) {
+  if (!item.productId || !item.quantity || !item.cost) {
+    toast.error("Fill all item fields ❌");
+    return;
+  }
+}
 
     try {
-      const selectedProduct = products.find(
-        (p) => String(p.id) === String(form.productId)
-      );
+      const purchaseItems = items.map((item) => {
+  const selectedProduct = products.find(
+    (p) => String(p.id) === String(item.productId)
+  );
 
-      if (!selectedProduct) {
-        toast.error("Product not found ❌");
-        return;
-      }
+  if (!selectedProduct) {
+    throw new Error("Product not found");
+  }
 
-      const quantity = Number(form.quantity);
-      const cost = Number(form.cost);
-      const total = quantity * cost;
+  return {
+    productId: selectedProduct.id,
+    productName: selectedProduct.name,
+    quantity: Number(item.quantity),
+    cost: Number(item.cost),
+    total: Number(item.quantity) * Number(item.cost),
+  };
+});
+
+const grandTotal = purchaseItems.reduce(
+  (sum, item) => sum + item.total,
+  0
+);
+      // const selectedProduct = products.find(
+      //   (p) => String(p.id) === String(form.productId)
+      // );
+
+      // if (!selectedProduct) {
+      //   toast.error("Product not found ❌");
+      //   return;
+      // }
+
+      // const quantity = Number(form.quantity);
+      // const cost = Number(form.cost);
+      // const total = quantity * cost;
 
       // UPDATE PRODUCT STOCK
-      await axios.put(`${BASE_URL}/products/${selectedProduct.id}`, {
-        ...selectedProduct,
-        stock: Number(selectedProduct.stock) + quantity,
-      });
+      // await axios.put(`${BASE_URL}/products/${selectedProduct.id}`, {
+      //   ...selectedProduct,
+      //   stock: Number(selectedProduct.stock) + quantity,
+      // });
+      for (const item of purchaseItems) {
+  const selectedProduct = products.find(
+    (p) => String(p.id) === String(item.productId)
+  );
+
+  await axios.put(`${BASE_URL}/products/${selectedProduct.id}`, {
+    ...selectedProduct,
+    stock: Number(selectedProduct.stock) + Number(item.quantity),
+  });
+}
 
       // UPDATE PURCHASE
       if (editId) {
         await axios.put(`${BASE_URL}/purchases/${editId}`, {
-          id: editId,
-          supplier: form.supplier || "-",
-          productId: selectedProduct.id,
-          productName: selectedProduct.name,
-          quantity,
-          cost,
-          total,
-          date: new Date().toISOString(),
-        });
+  id: editId,
+  supplier: supplier || "-",
+  items: purchaseItems,
+  productName: `${purchaseItems.length} items`,
+  total: grandTotal,
+  date: new Date().toISOString(),
+});
+        // await axios.put(`${BASE_URL}/purchases/${editId}`, {
+        //   id: editId,
+        //   supplier: form.supplier || "-",
+        //   productId: selectedProduct.id,
+        //   productName: selectedProduct.name,
+        //   quantity,
+        //   cost,
+        //   total,
+        //   date: new Date().toISOString(),
+        // });
 
         toast.success("Purchase Updated Successfully ✅");
       }
 
       // ADD PURCHASE
       else {
+        // await axios.post(`${BASE_URL}/purchases`, {
+        //   supplier: form.supplier || "-",
+        //   productId: selectedProduct.id,
+        //   productName: selectedProduct.name,
+        //   quantity,
+        //   cost,
+        //   total,
+        //   date: new Date().toISOString(),
+        // });
         await axios.post(`${BASE_URL}/purchases`, {
-          supplier: form.supplier || "-",
-          productId: selectedProduct.id,
-          productName: selectedProduct.name,
-          quantity,
-          cost,
-          total,
-          date: new Date().toISOString(),
-        });
+  supplier: supplier || "-",
+  items: purchaseItems,
+  productName: `${purchaseItems.length} items`,
+  total: grandTotal,
+  date: new Date().toISOString(),
+});
 
         toast.success("Purchase Added Successfully ✅");
       }
 
-      setForm({
-        productId: "",
-        quantity: 1,
-        cost: "",
-        supplier: "",
-      });
+      // setForm({
+      //   productId: "",
+      //   quantity: 1,
+      //   cost: "",
+      //   supplier: "",
+      // });
+      setSupplier("");
+
+setItems([
+  {
+    productId: "",
+    quantity: 1,
+    cost: "",
+  },
+]);
 
       setEditId(null);
       setShowModal(false);
@@ -179,12 +301,21 @@ const Purchase = () => {
             setShowModal(true);
             setEditId(null);
 
-            setForm({
-              productId: "",
-              quantity: 1,
-              cost: "",
-              supplier: "",
-            });
+            // setForm({
+            //   productId: "",
+            //   quantity: 1,
+            //   cost: "",
+            //   supplier: "",
+            // });
+            setSupplier("");
+
+setItems([
+  {
+    productId: "",
+    quantity: 1,
+    cost: "",
+  },
+]);
           }}
           className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold"
         >
@@ -350,7 +481,7 @@ const Purchase = () => {
               className="p-5 space-y-4"
             >
 
-              <div>
+              {/* <div>
                 <label className="text-sm text-gray-500">
                   Product
                 </label>
@@ -418,7 +549,80 @@ const Purchase = () => {
                   onChange={handleChange}
                   className="border p-3 rounded-lg w-full"
                 />
-              </div>
+              </div> */}
+              <div>
+  <label className="text-sm text-gray-500">
+    Supplier Name
+  </label>
+
+  <input
+    type="text"
+    placeholder="Supplier Name"
+    value={supplier}
+    onChange={(e) => setSupplier(e.target.value)}
+    className="border p-3 rounded-lg w-full"
+  />
+</div>
+
+<div className="space-y-3">
+  {items.map((item, index) => (
+    <div key={index} className="border rounded-lg p-3 bg-gray-50">
+
+      <select
+        value={item.productId}
+        onChange={(e) =>
+          handleItemChange(index, "productId", e.target.value)
+        }
+        className="border p-3 rounded-lg w-full mb-2"
+      >
+        <option value="">Select Product</option>
+
+        {products.map((product) => (
+          <option key={product.id} value={product.id}>
+            {product.name}
+          </option>
+        ))}
+      </select>
+
+      <input
+        type="number"
+        placeholder="Quantity"
+        value={item.quantity}
+        onChange={(e) =>
+          handleItemChange(index, "quantity", e.target.value)
+        }
+        className="border p-3 rounded-lg w-full mb-2"
+      />
+
+      <input
+        type="number"
+        placeholder="Cost Price"
+        value={item.cost}
+        onChange={(e) =>
+          handleItemChange(index, "cost", e.target.value)
+        }
+        className="border p-3 rounded-lg w-full mb-2"
+      />
+
+      <button
+        type="button"
+        onClick={() => removeItemRow(index)}
+        className="bg-red-500 text-white px-4 py-2 rounded-lg"
+      >
+        Remove
+      </button>
+
+    </div>
+  ))}
+</div>
+
+<button
+  type="button"
+  onClick={addItemRow}
+  className="w-full bg-gray-200 py-2 rounded-lg"
+>
+  + Add Product
+</button>
 
               <button className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold">
                 {editId ? "Update Purchase" : "Add Stock"}

@@ -8,14 +8,6 @@
   ],
   "products": [
     {
-      "id": "1",
-      "name": "Rice",
-      "price": 50,
-      "stock": 173,
-      "minStock": 10,
-      "category": "food"
-    },
-    {
       "id": "d6d3",
       "name": "egg",
       "price": 10,
@@ -27,7 +19,7 @@
       "id": "cd9f",
       "name": "book",
       "price": 50,
-      "stock": 300,
+      "stock": 299,
       "minStock": 200,
       "category": "stationary"
     },
@@ -35,7 +27,7 @@
       "id": "1b27",
       "name": "pen",
       "price": 10,
-      "stock": 108,
+      "stock": 105,
       "minStock": 100,
       "category": "stationary"
     },
@@ -67,7 +59,7 @@
       "id": "37ee",
       "name": "water bottel",
       "price": 170,
-      "stock": 105,
+      "stock": 103,
       "minStock": 40,
       "category": "stationary"
     },
@@ -75,7 +67,7 @@
       "id": "3d7d",
       "name": "color pen",
       "price": 200,
-      "stock": 170,
+      "stock": 169,
       "minStock": 70,
       "category": "stationary"
     },
@@ -94,6 +86,14 @@
       "stock": 9,
       "minStock": 5,
       "category": "stationary"
+    },
+    {
+      "id": "f017",
+      "name": "Rice",
+      "price": 250,
+      "stock": 37,
+      "minStock": 20,
+      "category": "food"
     }
   ],
   "purchases": [
@@ -108,7 +108,7 @@
     },
     {
       "id": "98d0",
-      "productId": "1",
+      "productId": null,
       "productName": "Rice",
       "quantity": 90,
       "cost": 900,
@@ -203,24 +203,87 @@
       "date": "2026-04-27T06:49:28.487Z"
     },
     {
-      "id": "9a98",
+      "id": "7f01",
+      "invoiceNo": "INV-S-0001",
       "customer": "miya",
-      "productId": "645c",
-      "productName": "Glass",
-      "price": 100,
+      "items": [
+        {
+          "productId": "37ee",
+          "productName": "water bottel",
+          "price": 170,
+          "quantity": 2,
+          "subtotal": 340
+        },
+        {
+          "productId": "cd9f",
+          "productName": "book",
+          "price": 50,
+          "quantity": 1,
+          "subtotal": 50
+        },
+        {
+          "productId": "1b27",
+          "productName": "pen",
+          "price": 10,
+          "quantity": 3,
+          "subtotal": 30
+        }
+      ],
+      "productId": "37ee",
+      "productName": "3 items",
+      "price": 170,
       "quantity": 2,
-      "total": 200,
-      "date": "2026-05-11T04:31:48.273Z"
+      "total": 420,
+      "receivedAmount": 220,
+      "pending": 200,
+      "status": "Pending",
+      "date": "2026-05-11T07:08:28.400Z"
     },
     {
-      "id": "7ccf",
+      "id": "32a0",
+      "invoiceNo": "INV-S-0002",
       "customer": "hasna",
-      "productId": "645c",
-      "productName": "Glass",
-      "price": 100,
-      "quantity": 1,
-      "total": 100,
-      "date": "2026-05-11T04:38:53.937Z"
+      "items": [
+        {
+          "productId": "3d7d",
+          "productName": "color pen",
+          "price": 200,
+          "quantity": 2,
+          "subtotal": 400
+        }
+      ],
+      "productId": "3d7d",
+      "productName": "color pen",
+      "price": 200,
+      "quantity": 2,
+      "total": 400,
+      "receivedAmount": 350,
+      "pending": 50,
+      "status": "Pending",
+      "date": "2026-05-11T07:09:59.696Z"
+    },
+    {
+      "id": "17ca",
+      "invoiceNo": "INV-S-0003",
+      "customer": "priya",
+      "items": [
+        {
+          "productId": "f017",
+          "productName": "Rice",
+          "price": 250,
+          "quantity": 5,
+          "subtotal": 1250
+        }
+      ],
+      "productId": "f017",
+      "productName": "Rice",
+      "price": 250,
+      "quantity": 5,
+      "total": 1250,
+      "receivedAmount": 1000,
+      "pending": 250,
+      "status": "Pending",
+      "date": "2026-05-11T07:13:38.834Z"
     }
   ],
   "expenses": [
@@ -290,7 +353,7 @@
     {
       "id": "a59a",
       "type": "purchase",
-      "productId": "1",
+      "productId": null,
       "productName": "Rice",
       "qty": 18,
       "amount": 900,
@@ -328,6 +391,32 @@
       "total": 100,
       "type": "sale",
       "date": "2026-05-11T04:39:10.035Z"
+    },
+    {
+      "id": "28f2",
+      "type": "sale",
+      "invoiceNo": "INV-S-0002",
+      "saleId": "32a0",
+      "customer": "hasna",
+      "productId": "3d7d",
+      "productName": "color pen",
+      "qty": 1,
+      "amount": 200,
+      "reason": "-",
+      "date": "2026-05-11T07:10:38.626Z"
+    },
+    {
+      "id": "62e3",
+      "type": "sale",
+      "invoiceNo": "INV-S-0003",
+      "saleId": "17ca",
+      "customer": "priya",
+      "productId": "f017",
+      "productName": "Rice",
+      "qty": 2,
+      "amount": 500,
+      "reason": "-",
+      "date": "2026-05-11T07:16:24.953Z"
     }
   ]
 }
