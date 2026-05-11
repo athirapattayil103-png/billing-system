@@ -86,6 +86,14 @@
       "stock": 217,
       "minStock": 20,
       "category": "stationary"
+    },
+    {
+      "id": "645c",
+      "name": "Glass",
+      "price": 100,
+      "stock": 9,
+      "minStock": 5,
+      "category": "stationary"
     }
   ],
   "purchases": [
@@ -136,6 +144,16 @@
       "cost": 1000,
       "total": 50000,
       "date": "2026-05-07T10:28:23.017Z"
+    },
+    {
+      "id": "c5c2",
+      "supplier": "hus",
+      "productId": "645c",
+      "productName": "Glass",
+      "quantity": 1,
+      "cost": 100,
+      "total": 100,
+      "date": "2026-05-11T04:09:23.006Z"
     }
   ],
   "sales": [
@@ -183,6 +201,26 @@
       "quantity": 17,
       "total": 170,
       "date": "2026-04-27T06:49:28.487Z"
+    },
+    {
+      "id": "9a98",
+      "customer": "miya",
+      "productId": "645c",
+      "productName": "Glass",
+      "price": 100,
+      "quantity": 2,
+      "total": 200,
+      "date": "2026-05-11T04:31:48.273Z"
+    },
+    {
+      "id": "7ccf",
+      "customer": "hasna",
+      "productId": "645c",
+      "productName": "Glass",
+      "price": 100,
+      "quantity": 1,
+      "total": 100,
+      "date": "2026-05-11T04:38:53.937Z"
     }
   ],
   "expenses": [
@@ -282,6 +320,14 @@
       "total": 12000,
       "type": "purchase",
       "date": "2026-04-24T10:54:06.687Z"
+    },
+    {
+      "id": "be09",
+      "productName": "Glass",
+      "qty": 1,
+      "total": 100,
+      "type": "sale",
+      "date": "2026-05-11T04:39:10.035Z"
     }
   ]
 }
