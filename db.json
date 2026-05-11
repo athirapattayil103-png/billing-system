@@ -94,6 +94,14 @@
       "stock": 37,
       "minStock": 20,
       "category": "food"
+    },
+    {
+      "id": "7e3c",
+      "name": "Fan",
+      "price": 1200,
+      "stock": 53,
+      "minStock": 25,
+      "category": "furniture"
     }
   ],
   "purchases": [
@@ -186,6 +194,22 @@
       "productName": "1 items",
       "total": 10,
       "date": "2026-05-11T09:12:39.317Z"
+    },
+    {
+      "id": "9365",
+      "supplier": "shifa",
+      "items": [
+        {
+          "productId": "7e3c",
+          "productName": "Fan",
+          "quantity": 5,
+          "cost": 1200,
+          "total": 6000
+        }
+      ],
+      "productName": "1 items",
+      "total": 6000,
+      "date": "2026-05-11T09:47:18.568Z"
     }
   ],
   "sales": [
@@ -316,6 +340,29 @@
       "pending": 250,
       "status": "Pending",
       "date": "2026-05-11T07:13:38.834Z"
+    },
+    {
+      "id": "9c8f",
+      "invoiceNo": "INV-S-0004",
+      "customer": "giri",
+      "items": [
+        {
+          "productId": "7e3c",
+          "productName": "Fan",
+          "price": 1200,
+          "quantity": 2,
+          "subtotal": 2400
+        }
+      ],
+      "productId": "7e3c",
+      "productName": "Fan",
+      "price": 1200,
+      "quantity": 2,
+      "total": 2400,
+      "receivedAmount": 1200,
+      "pending": 1200,
+      "status": "Pending",
+      "date": "2026-05-11T09:49:26.478Z"
     }
   ],
   "expenses": [

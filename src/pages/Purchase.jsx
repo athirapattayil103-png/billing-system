@@ -6,12 +6,31 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { BASE_URL } from "../api";
+const generatePurchaseInvoice = (existingPurchases) => {
+  const invoicePurchases = existingPurchases.filter(
+    (p) => p.invoiceNo
+  );
+
+  if (invoicePurchases.length === 0) {
+    return "INV-P-0001";
+  }
+
+  const numbers = invoicePurchases.map((p) => {
+    const match = p.invoiceNo?.match(/INV-P-(\d+)/);
+    return match ? parseInt(match[1]) : 0;
+  });
+
+  const max = Math.max(...numbers);
+
+  return `INV-P-${String(max + 1).padStart(4, "0")}`;
+};
 
 const Purchase = () => {
   const [products, setProducts] = useState([]);
   const [purchases, setPurchases] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  const [currentInvoiceNo, setCurrentInvoiceNo] = useState("");
   // const [editId, setEditId] = useState(null);
 
   // const [form, setForm] = useState({
@@ -34,6 +53,7 @@ const [items, setItems] = useState([
     cost: "",
   },
 ]);
+
 
   // FETCH DATA
   const fetchData = async () => {
@@ -83,9 +103,9 @@ const removeItemRow = (index) => {
 };
 
   // EDIT
-
-  const handleEdit = (item) => {
+const handleEdit = (item) => {
   setSupplier(item.supplier || "-");
+  setCurrentInvoiceNo(item.invoiceNo || "");
 
   if (item.items && item.items.length > 0) {
     setItems(item.items);
@@ -232,7 +252,8 @@ if (!editId) {
         //   total,
         //   date: new Date().toISOString(),
         // });
-        await axios.post(`${BASE_URL}/purchases`, {
+      await axios.post(`${BASE_URL}/purchases`, {
+  invoiceNo: currentInvoiceNo,
   supplier: supplier || "-",
   items: purchaseItems,
   productName: `${purchaseItems.length} items`,
@@ -308,26 +329,24 @@ setItems([
         </div>
 
         <button
-          onClick={() => {
-            setShowModal(true);
-            setEditId(null);
+         onClick={() => {
+  setEditId(null);
+  setSupplier("");
 
-            // setForm({
-            //   productId: "",
-            //   quantity: 1,
-            //   cost: "",
-            //   supplier: "",
-            // });
-            setSupplier("");
+  setItems([
+    {
+      productId: "",
+      quantity: 1,
+      cost: "",
+    },
+  ]);
 
-setItems([
-  {
-    productId: "",
-    quantity: 1,
-    cost: "",
-  },
-]);
-          }}
+  setCurrentInvoiceNo(
+    generatePurchaseInvoice(purchases)
+  );
+
+  setShowModal(true);
+}}
           className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold"
         >
           + Add Purchase
@@ -372,7 +391,7 @@ setItems([
 
             <thead>
               <tr className="text-left border-b">
-                <th className="py-3">#</th>
+                <th className="py-3">Invoice</th>
                 <th>Supplier</th>
                 <th>Product</th>
                 <th>Qty</th>
@@ -388,9 +407,9 @@ setItems([
               {visiblePurchases.map((item, index) => (
                 <tr key={item.id} className="border-b">
 
-                  <td className="py-4">
-                    {index + 1}
-                  </td>
+                  <td className="py-4 text-blue-600 font-semibold">
+  {item.invoiceNo || "-"}
+</td>
 
                   <td>
                     {item.supplier || "-"}
@@ -493,8 +512,12 @@ setItems([
                   </p>
 
                   <h2 className="text-2xl font-bold">
-                    {editId ? "Edit Purchase" : "New Purchase"}
-                  </h2>
+  {editId ? "Edit Purchase" : "New Purchase"}
+</h2>
+
+<p className="text-sm font-mono opacity-90 mt-1">
+  {currentInvoiceNo}
+</p>
                 </div>
 
                 <button
