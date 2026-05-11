@@ -538,15 +538,44 @@ const Sales = () => {
       const pend = saleTotal - rec;
 
       // Update stock for new sales only
-      if (!editId) {
-        for (const item of saleItems) {
-          const prod = products.find((p) => p.id === item.productId);
-          await axios.put(`${BASE_URL}/products/${prod.id}`, {
-            ...prod,
-            stock: Number(prod.stock) - item.quantity,
-          });
-        }
+      // if (!editId) {
+      //   for (const item of saleItems) {
+      //     const prod = products.find((p) => p.id === item.productId);
+      //     await axios.put(`${BASE_URL}/products/${prod.id}`, {
+      //       ...prod,
+      //       stock: Number(prod.stock) - item.quantity,
+      //     });
+      //   }
+      // }
+      if (editId) {
+  const oldSale = sales.find((s) => s.id === editId);
+
+  if (oldSale?.items) {
+    for (const oldItem of oldSale.items) {
+      const prod = products.find(
+        (p) => p.id === oldItem.productId
+      );
+
+      if (prod) {
+        await axios.put(`${BASE_URL}/products/${prod.id}`, {
+          ...prod,
+          stock: Number(prod.stock) + Number(oldItem.quantity),
+        });
       }
+    }
+  }
+}
+
+for (const item of saleItems) {
+  const prod = products.find(
+    (p) => p.id === item.productId
+  );
+
+  await axios.put(`${BASE_URL}/products/${prod.id}`, {
+    ...prod,
+    stock: Number(prod.stock) - item.quantity,
+  });
+}
 
       const salePayload = {
         invoiceNo: currentInvoiceNo,
@@ -572,9 +601,25 @@ const Sales = () => {
         toast.success("Sale completed 💰");
       }
 
+      // setShowModal(false);
+      // setEditId(null);
+      // fetchData();
       setShowModal(false);
-      setEditId(null);
-      fetchData();
+setEditId(null);
+
+setCustomer("");
+
+setItems([
+  {
+    productId: "",
+    quantity: 1,
+  },
+]);
+
+setReceivedAmount("");
+setCurrentInvoiceNo("");
+
+fetchData();
     } catch (err) {
       toast.error("Error completing sale ❌");
     }
@@ -654,9 +699,12 @@ const Sales = () => {
                   </td>
                   <td>{item.customer || "-"}</td>
                   <td>
-                    {item.items && item.items.length > 1
+                    {/* {item.items && item.items.length > 1
                       ? <span className="text-purple-600 font-medium">{item.items.length} items</span>
-                      : item.productName || "-"}
+                      : item.productName || "-"} */}
+                      {item.items
+  ? item.items.map((i) => i.productName).join(", ")
+  : item.productName || "-"}
                   </td>
                   <td>
                     {item.items && item.items.length > 1

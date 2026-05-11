@@ -38,9 +38,12 @@ const Customers = () => {
 
     customersMap[name].total += Number(sale.total || 0);
 
+    // customersMap[name].received += Number(
+    //   sale.received || sale.total || 0
+    // );
     customersMap[name].received += Number(
-      sale.received || sale.total || 0
-    );
+  sale.receivedAmount || sale.received || sale.total || 0
+);
   });
 
   // FINAL ARRAY

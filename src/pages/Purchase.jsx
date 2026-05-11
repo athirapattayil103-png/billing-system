@@ -175,17 +175,28 @@ const grandTotal = purchaseItems.reduce(
       //   ...selectedProduct,
       //   stock: Number(selectedProduct.stock) + quantity,
       // });
-      for (const item of purchaseItems) {
-  const selectedProduct = products.find(
-    (p) => String(p.id) === String(item.productId)
-  );
+//       for (const item of purchaseItems) {
+//   const selectedProduct = products.find(
+//     (p) => String(p.id) === String(item.productId)
+//   );
 
-  await axios.put(`${BASE_URL}/products/${selectedProduct.id}`, {
-    ...selectedProduct,
-    stock: Number(selectedProduct.stock) + Number(item.quantity),
-  });
+//   await axios.put(`${BASE_URL}/products/${selectedProduct.id}`, {
+//     ...selectedProduct,
+//     stock: Number(selectedProduct.stock) + Number(item.quantity),
+//   });
+// }
+if (!editId) {
+  for (const item of purchaseItems) {
+    const selectedProduct = products.find(
+      (p) => String(p.id) === String(item.productId)
+    );
+
+    await axios.put(`${BASE_URL}/products/${selectedProduct.id}`, {
+      ...selectedProduct,
+      stock: Number(selectedProduct.stock) + Number(item.quantity),
+    });
+  }
 }
-
       // UPDATE PURCHASE
       if (editId) {
         await axios.put(`${BASE_URL}/purchases/${editId}`, {
